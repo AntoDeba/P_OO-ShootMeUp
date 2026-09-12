@@ -12,8 +12,9 @@ namespace Drones
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
 
+
             // Démarrage
-            Application.Run(new AirSpace(new Drone(AirSpace.WIDTH / 2, AirSpace.HEIGHT / 2, "Joe")));
+            Application.Run(new AirSpace(new Joueur(AirSpace.WIDTH / 2, AirSpace.HEIGHT / 2)));
         }
     }
 }

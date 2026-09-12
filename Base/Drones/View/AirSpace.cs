@@ -1,3 +1,5 @@
+using static System.Runtime.CompilerServices.RuntimeHelpers;
+
 namespace Drones
 {
     // La classe AirSpace représente le territoire au dessus duquel les drones peuvent voler
@@ -10,13 +12,13 @@ namespace Drones
         public static readonly int HEIGHT = 600;
 
         // La flotte est l'ensemble des drones qui évoluent dans notre espace aérien
-        private Drone _player;
+        private Joueur _player;
 
         BufferedGraphicsContext currentContext;
         BufferedGraphics airspace;
 
         // Initialisation de l'espace aérien avec un certain nombre de drones
-        public AirSpace(Drone player)
+        public AirSpace(Joueur player)
         {
             InitializeComponent();
             ClientSize = new Size(WIDTH, HEIGHT);
@@ -54,12 +56,18 @@ namespace Drones
 
         private void AirSpace_KeyDown(object sender, KeyEventArgs e)
         {
-            switch (e.KeyCode)
-            {
-                case Keys.Space:
-                    _player.ChangeDirection();
-                    break;
-            }
+            if (e.KeyCode == Keys.W)
+                _player.GoUp();
+            if(e.KeyCode == Keys.S)
+                _player.GoDown();
+            if (e.KeyCode == Keys.D)
+                _player.GoRight();
+            if (e.KeyCode == Keys.A)
+                _player.GoLeft();
+            if (e.KeyCode != Keys.W && e.KeyCode != Keys.S)
+                _player.NotVertical();
+            if (e.KeyCode != Keys.A && e.KeyCode != Keys.D)
+                _player.NotHorizontal();
         }
     }
 }
