@@ -46,6 +46,7 @@
             Text = "AirSpace";
             KeyDown += BattleMap_KeyDown;
             KeyUp += BattleMap_KeyUp;
+            this.MouseClick += mouseClick;
             ResumeLayout(false);
 
         }

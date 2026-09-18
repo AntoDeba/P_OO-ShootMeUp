@@ -28,6 +28,7 @@ namespace ShootMeUp
         // que 'interval' millisecondes se sont écoulées
         public void Update(int interval) 
         {
+
             if (keysPressed.Contains('W') == true && y > 0)
                 y -= SPEED;
             if (keysPressed.Contains('S') == true && y < BattleMap.HEIGHT-PLAYER_HEIGHT)

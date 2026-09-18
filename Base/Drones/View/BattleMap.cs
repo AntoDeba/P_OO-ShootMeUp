@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using static System.Runtime.CompilerServices.RuntimeHelpers;
 
@@ -66,12 +67,23 @@ namespace ShootMeUp
         }
         private void BattleMap_KeyDown(object sender, KeyEventArgs e)
         {
+            
             currentlyPressedKey = Convert.ToChar(e.KeyValue);
 
             if (!_player.KeysPressed.Contains(currentlyPressedKey)) //si la liste ne contien pas déja la touche
             {
                 _player.KeysPressed.Add(currentlyPressedKey); //Ajoute la touche à la liste
             }
+
+
         }
+        private void mouseClick(object sender, MouseEventArgs e)
+        {
+            if(e.Button == MouseButtons.Left)
+                Console.WriteLine("Left");
+            if (e.Button == MouseButtons.Right)
+                Console.WriteLine("Right");
+        }
+
     }
 }
