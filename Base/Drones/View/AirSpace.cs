@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace Drones
@@ -10,6 +11,7 @@ namespace Drones
     {
         public static readonly int WIDTH = 1200;        // Dimensions of the airspace
         public static readonly int HEIGHT = 600;
+        private string currentlyPressedKey;
 
         // La flotte est l'ensemble des drones qui évoluent dans notre espace aérien
         private Joueur _player;
@@ -53,21 +55,24 @@ namespace Drones
             this.Update(ticker.Interval);
             this.Render();
         }
+        private void AirSpace_KeyUp(object sender, KeyEventArgs e)
+        {
+            currentlyPressedKey = Convert.ToChar(e.KeyValue).ToString();
 
+            if (_player.KeysPressed.Contains(currentlyPressedKey)) //si la liste contien la touche
+            {
+                _player.KeysPressed.Remove(currentlyPressedKey); //Retire la touche à la liste
+            }
+        }
         private void AirSpace_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.W)
-                _player.GoUp();
-            if(e.KeyCode == Keys.S)
-                _player.GoDown();
-            if (e.KeyCode == Keys.D)
-                _player.GoRight();
-            if (e.KeyCode == Keys.A)
-                _player.GoLeft();
-            if (e.KeyCode != Keys.W && e.KeyCode != Keys.S)
-                _player.NotVertical();
-            if (e.KeyCode != Keys.A && e.KeyCode != Keys.D)
-                _player.NotHorizontal();
+            currentlyPressedKey = Convert.ToChar(e.KeyValue).ToString();
+
+
+            if (!_player.KeysPressed.Contains(currentlyPressedKey)) //si la liste ne contien pas déja la touche
+            {
+                _player.KeysPressed.Add(currentlyPressedKey); //Ajoute la touche à la liste
+            }
         }
     }
 }

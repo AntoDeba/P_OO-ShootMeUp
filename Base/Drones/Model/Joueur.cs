@@ -6,11 +6,15 @@ namespace Drones
     // Cette partie de la classe Drone définit ce qu'est un drone par un modèle numérique
     public class Joueur
     {
-        public int x;                                 // Position en X depuis la gauche de l'espace aérien
-        public int y;                                 // Position en Y depuis le haut de l'espace aérien
-        public int speed_x;                           // Déplacement horizontal
-        public int speed_y;
+        public int x;                                           // Position en X depuis la gauche de l'espace aérien
+        public int y;                                           // Position en Y depuis le haut de l'espace aérien
+        private const int SPEED = 20;                           // Vitesse du joueur
+        private List<string> keysPressed = new List<string>();  //Liste des touches pressé
+        private const int PLAYER_HEIGHT = 50;
+        private const int PLAYER_WIDTH = 50;
 
+        public List<string> KeysPressed { get => keysPressed; set => keysPressed = value; }
+        
         // Constructeur
         public Joueur(int x, int y)
         {
@@ -18,47 +22,21 @@ namespace Drones
             this.y = y;
         }
 
-        // Cette méthode calcule le nouvel état dans lequel le drone se trouve après
+        // Cette méthode calcule le nouvel état dans lequel le joueur se trouve après que
         // que 'interval' millisecondes se sont écoulées
-        public void Update(int interval)
+        public void Update(int interval) 
         {
-            x += speed_x;   
-            y += speed_y;
-
-            speed_x = 0;
-            speed_y = 0;
+            if (keysPressed.Contains("W") == true && y > 0)
+                y -= SPEED;
+            if (keysPressed.Contains("S") == true && y < AirSpace.HEIGHT-PLAYER_HEIGHT)
+                y += SPEED;
+            if (keysPressed.Contains("A") == true && x > 0)
+                x -= SPEED;
+            if (keysPressed.Contains("D") == true && x < AirSpace.WIDTH-PLAYER_WIDTH)
+                x += SPEED;
         }
 
-        
-        public void GoUp()
-        {
 
-            if (y >= 10)
-                speed_y += -10;
-        }
-        public void GoDown()
-        {
-            if (y <= AirSpace.HEIGHT-50)
-                speed_y += 10;
-        }
-        public void GoRight()
-        {
-            if (x <= AirSpace.WIDTH-50)
-                speed_x += 10;
-        }
-        public void GoLeft()
-        {
-            if (x >= 10)
-                speed_x += -10;
-        }
-        public void NotHorizontal()
-        {
-            speed_x = 0;
-        }
-        public void NotVertical()
-        {
-            speed_y = 0;
-        }
 
         /// //////////////////////////////////////////////////////////////////////////////
         //  
@@ -70,10 +48,12 @@ namespace Drones
 
         private Pen droneBrush = new Pen(new SolidBrush(Color.Purple), 3);
 
+        
+
         // De manière graphique
         public void Render(BufferedGraphics drawingSpace)
         {
-            drawingSpace.Graphics.DrawImage(Resources.drone, x, y, 50, 50);
+            drawingSpace.Graphics.DrawImage(Resources.drone, x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
             //drawingSpace.Graphics.DrawString($"{this}", TextHelpers.drawFont, TextHelpers.writingBrush, x + 5, y - 25);
         }
 
