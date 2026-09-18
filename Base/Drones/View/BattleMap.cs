@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 using static System.Runtime.CompilerServices.RuntimeHelpers;
 
@@ -13,12 +14,15 @@ namespace ShootMeUp
         public static readonly int WIDTH = 1200;        // Dimensions of the airspace
         public static readonly int HEIGHT = 600;
         private char currentlyPressedKey;
-
-        // La flotte est l'ensemble des drones qui évoluent dans notre espace aérien
+        
         private Joueur _player;
 
+        //Tous les projectiles de type burger
+        public static List<projectileBurger> allBurgers = new List<projectileBurger>();
+
+
         BufferedGraphicsContext currentContext;
-        BufferedGraphics airspace;
+        BufferedGraphics battleMap;
 
         // Initialisation de l'espace aérien avec un certain nombre de drones
         public BattleMap(Joueur player)
@@ -30,24 +34,30 @@ namespace ShootMeUp
             currentContext = BufferedGraphicsManager.Current;
             // Creates a BufferedGraphics instance associated with this form, and with
             // dimensions the same size as the drawing surface of the form.
-            airspace = currentContext.Allocate(this.CreateGraphics(), this.DisplayRectangle);
+            battleMap = currentContext.Allocate(this.CreateGraphics(), this.DisplayRectangle);
             this._player = player;
         }
 
         // Affichage de la situation actuelle
         private void Render()
         {
-            airspace.Graphics.Clear(Color.AliceBlue);
+            battleMap.Graphics.Clear(Color.AliceBlue);
 
-            _player.Render(airspace);
+            _player.Render(battleMap);
 
-            airspace.Render();
+            foreach (projectileBurger monBurger in allBurgers) //affiches les projectils burgers
+                monBurger.Render(battleMap);
+
+            battleMap.Render();
         }
 
         // Calcul du nouvel état après que 'interval' millisecondes se sont écoulées
         private void Update(int interval)
         {
             _player.Update(interval);
+            
+            foreach (projectileBurger monBurger in allBurgers) //met à jour les projectils
+                monBurger.Update(interval);
         }
 
         // Méthode appelée à chaque frame
@@ -79,13 +89,11 @@ namespace ShootMeUp
         }
         private void mouseClick(object sender, MouseEventArgs e)
         {
-            Console.WriteLine();
-
             if(e.Button == MouseButtons.Left)
-                Console.WriteLine("Left");
+                _player.FireBurger(e.X, e.Y);
             if (e.Button == MouseButtons.Right)
-                Console.WriteLine("Right");
-            _player.FireBurger(e.X, e.Y);
+                return;
+            
         }
 
     }
