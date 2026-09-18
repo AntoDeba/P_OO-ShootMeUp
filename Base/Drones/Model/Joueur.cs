@@ -9,11 +9,11 @@ namespace Drones
         public int x;                                           // Position en X depuis la gauche de l'espace aérien
         public int y;                                           // Position en Y depuis le haut de l'espace aérien
         private const int SPEED = 20;                           // Vitesse du joueur
-        private List<string> keysPressed = new List<string>();  //Liste des touches pressé
+        private List<char> keysPressed = new List<char>();  //Liste des touches pressé
         private const int PLAYER_HEIGHT = 50;
         private const int PLAYER_WIDTH = 50;
 
-        public List<string> KeysPressed { get => keysPressed; set => keysPressed = value; }
+        public List<char> KeysPressed { get => keysPressed; set => keysPressed = value; }
         
         // Constructeur
         public Joueur(int x, int y)
@@ -26,13 +26,13 @@ namespace Drones
         // que 'interval' millisecondes se sont écoulées
         public void Update(int interval) 
         {
-            if (keysPressed.Contains("W") == true && y > 0)
+            if (keysPressed.Contains('W') == true && y > 0)
                 y -= SPEED;
-            if (keysPressed.Contains("S") == true && y < AirSpace.HEIGHT-PLAYER_HEIGHT)
+            if (keysPressed.Contains('S') == true && y < BattleMap.HEIGHT-PLAYER_HEIGHT)
                 y += SPEED;
-            if (keysPressed.Contains("A") == true && x > 0)
+            if (keysPressed.Contains('A') == true && x > 0)
                 x -= SPEED;
-            if (keysPressed.Contains("D") == true && x < AirSpace.WIDTH-PLAYER_WIDTH)
+            if (keysPressed.Contains('D') == true && x < BattleMap.WIDTH-PLAYER_WIDTH)
                 x += SPEED;
         }
 

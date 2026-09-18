@@ -7,11 +7,11 @@ namespace Drones
     // Il s'agit d'un formulaire (une fenêtre) qui montre une vue 2D depuis en dessus
     // Il n'y a donc pas de notion d'altitude qui intervient
 
-    public partial class AirSpace : Form
+    public partial class BattleMap : Form
     {
         public static readonly int WIDTH = 1200;        // Dimensions of the airspace
         public static readonly int HEIGHT = 600;
-        private string currentlyPressedKey;
+        private char currentlyPressedKey;
 
         // La flotte est l'ensemble des drones qui évoluent dans notre espace aérien
         private Joueur _player;
@@ -20,7 +20,7 @@ namespace Drones
         BufferedGraphics airspace;
 
         // Initialisation de l'espace aérien avec un certain nombre de drones
-        public AirSpace(Joueur player)
+        public BattleMap(Joueur player)
         {
             InitializeComponent();
             ClientSize = new Size(WIDTH, HEIGHT);
@@ -55,19 +55,18 @@ namespace Drones
             this.Update(ticker.Interval);
             this.Render();
         }
-        private void AirSpace_KeyUp(object sender, KeyEventArgs e)
+        private void BattleMap_KeyUp(object sender, KeyEventArgs e)
         {
-            currentlyPressedKey = Convert.ToChar(e.KeyValue).ToString();
+            currentlyPressedKey = Convert.ToChar(e.KeyValue);
 
             if (_player.KeysPressed.Contains(currentlyPressedKey)) //si la liste contien la touche
             {
                 _player.KeysPressed.Remove(currentlyPressedKey); //Retire la touche à la liste
             }
         }
-        private void AirSpace_KeyDown(object sender, KeyEventArgs e)
+        private void BattleMap_KeyDown(object sender, KeyEventArgs e)
         {
-            currentlyPressedKey = Convert.ToChar(e.KeyValue).ToString();
-
+            currentlyPressedKey = Convert.ToChar(e.KeyValue);
 
             if (!_player.KeysPressed.Contains(currentlyPressedKey)) //si la liste ne contien pas déja la touche
             {

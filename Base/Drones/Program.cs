@@ -14,7 +14,7 @@ namespace Drones
 
 
             // Démarrage
-            Application.Run(new AirSpace(new Joueur(AirSpace.WIDTH / 2, AirSpace.HEIGHT / 2)));
+            Application.Run(new BattleMap(new Joueur(BattleMap.WIDTH / 2, BattleMap.HEIGHT / 2)));
         }
     }
 }

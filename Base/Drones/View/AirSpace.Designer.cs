@@ -1,6 +1,6 @@
 ﻿namespace Drones
 {
-    partial class AirSpace : Form
+    partial class BattleMap : Form
     {
         /// <summary>
         ///  Required designer variable.
@@ -44,8 +44,8 @@
             ClientSize = new Size(284, 261);
             Name = "AirSpace";
             Text = "AirSpace";
-            KeyDown += AirSpace_KeyDown;
-            KeyUp += AirSpace_KeyUp;
+            KeyDown += BattleMap_KeyDown;
+            KeyUp += BattleMap_KeyUp;
             ResumeLayout(false);
 
         }
