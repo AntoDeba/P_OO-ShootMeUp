@@ -9,13 +9,11 @@ namespace ShootMeUp
         private int x;                                           // Position en X depuis la gauche de l'espace aérien
         private int y;                                           // Position en Y depuis le haut de l'espace aérien
         private const int SPEED = 20;                           // Vitesse du joueur
-        private List<char> keysPressed = new List<char>();  //Liste des touches pressé
         private const int PLAYER_HEIGHT = 50;
         private const int PLAYER_WIDTH = 50;
-
+        private List<char> keysPressed = new List<char>();  //Liste des touches pressé
         public List<char> KeysPressed { get => keysPressed; set => keysPressed = value; }
-
-        private projectileBurger monBurger = new projectileBurger(50, 50);
+        private List<projectileBurger> allBurgers = new List<projectileBurger>();
         
         // Constructeur
         public Joueur(int x, int y)
@@ -39,7 +37,12 @@ namespace ShootMeUp
                 x += SPEED;
         }
 
-
+        public void FireBurger(int mouseX, int mouseY)
+        {
+            projectileBurger monBurger = new projectileBurger(mouseY, mouseX );
+            allBurgers.Add(monBurger);
+            
+        }
 
         /// //////////////////////////////////////////////////////////////////////////////
         //  
@@ -57,8 +60,9 @@ namespace ShootMeUp
         public void Render(BufferedGraphics drawingSpace)
         {
             drawingSpace.Graphics.DrawImage(Resources.drone, x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
+            foreach (projectileBurger monBurger in allBurgers)
+                monBurger.Render(drawingSpace);
 
-            monBurger.Render(drawingSpace);
             //drawingSpace.Graphics.DrawString($"{this}", TextHelpers.drawFont, TextHelpers.writingBrush, x + 5, y - 25);
         }
 

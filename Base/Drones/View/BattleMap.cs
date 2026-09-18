@@ -79,10 +79,13 @@ namespace ShootMeUp
         }
         private void mouseClick(object sender, MouseEventArgs e)
         {
+            Console.WriteLine();
+
             if(e.Button == MouseButtons.Left)
                 Console.WriteLine("Left");
             if (e.Button == MouseButtons.Right)
                 Console.WriteLine("Right");
+            _player.FireBurger(e.X, e.Y);
         }
 
     }
