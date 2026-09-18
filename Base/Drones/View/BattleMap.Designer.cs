@@ -1,4 +1,4 @@
-﻿namespace Drones
+﻿namespace ShootMeUp
 {
     partial class BattleMap : Form
     {

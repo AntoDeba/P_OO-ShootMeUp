@@ -1,19 +1,21 @@
-﻿using Drones.Helpers;
-using Drones.Properties;
+﻿using ShootMeUp.Helpers;
+using ShootMeUp.Properties;
 
-namespace Drones
+namespace ShootMeUp
 {
     // Cette partie de la classe Drone définit ce qu'est un drone par un modèle numérique
     public class Joueur
     {
-        public int x;                                           // Position en X depuis la gauche de l'espace aérien
-        public int y;                                           // Position en Y depuis le haut de l'espace aérien
+        private int x;                                           // Position en X depuis la gauche de l'espace aérien
+        private int y;                                           // Position en Y depuis le haut de l'espace aérien
         private const int SPEED = 20;                           // Vitesse du joueur
         private List<char> keysPressed = new List<char>();  //Liste des touches pressé
         private const int PLAYER_HEIGHT = 50;
         private const int PLAYER_WIDTH = 50;
 
         public List<char> KeysPressed { get => keysPressed; set => keysPressed = value; }
+
+        private projectileBurger monBurger = new projectileBurger(50, 50);
         
         // Constructeur
         public Joueur(int x, int y)
@@ -54,6 +56,8 @@ namespace Drones
         public void Render(BufferedGraphics drawingSpace)
         {
             drawingSpace.Graphics.DrawImage(Resources.drone, x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
+
+            monBurger.Render(drawingSpace);
             //drawingSpace.Graphics.DrawString($"{this}", TextHelpers.drawFont, TextHelpers.writingBrush, x + 5, y - 25);
         }
 
