@@ -34,8 +34,6 @@ namespace ShootMeUp
         // que 'interval' millisecondes se sont écoulées
         public void Update(int interval) 
         {
-            Console.WriteLine(_modeMelee);
-
             _framesSinceLastMeleeAtack++;
             _framesSinceLastShot++;
 
@@ -100,8 +98,12 @@ namespace ShootMeUp
         public void Render(BufferedGraphics drawingSpace)
         {
             drawingSpace.Graphics.DrawImage(Resources.drone, x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
+            if(_modeMelee == true)
+            {
+                drawingSpace.Graphics.FillEllipse(new SolidBrush(Color.Purple), x + (PLAYER_WIDTH / 2), y + (PLAYER_HEIGHT/2), PLAYER_WIDTH, PLAYER_HEIGHT);
+            }
 
-            drawingSpace.Graphics.DrawString($"{this}", TextHelpers.drawFont, TextHelpers.writingBrush, x + 5, y - 25);
+            //drawingSpace.Graphics.DrawString($"{this}", TextHelpers.drawFont, TextHelpers.writingBrush, 5, 25);
 
         }
         
