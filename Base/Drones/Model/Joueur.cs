@@ -27,6 +27,8 @@ namespace ShootMeUp
         public void Update(int interval) 
         {
 
+            //Modifife la position du joueur en fonction de la touche sur laquelle il appuie en ne dépassant pas les limites.
+            //la position change en fonction de la vitesse
             if (keysPressed.Contains('W') == true && y > 0)
                 y -= SPEED;
             if (keysPressed.Contains('S') == true && y < BattleMap.HEIGHT-PLAYER_HEIGHT)

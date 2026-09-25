@@ -60,6 +60,14 @@ namespace ShootMeUp
             
             foreach (projectileBurger monBurger in allBurgers) //met à jour les projectils
                 monBurger.Update(interval);
+
+            for(int i = allBurgers.Count -1; i >= 0; i--)
+            {
+                if (allBurgers[i].X > BattleMap.WIDTH || allBurgers[i].Y > BattleMap.HEIGHT || allBurgers[i].X < 0 || allBurgers[i].Y < 0)
+                {
+                    allBurgers.RemoveAt(i);
+                }
+            }
         }
 
         // Méthode appelée à chaque frame

@@ -23,21 +23,25 @@ namespace ShootMeUp
         private double _distance;
         private float _completionIndex = 0;
 
+        public float X { get => _x;}
+        public float Y { get => _y; }
+
         public projectileBurger(int destX, int destY, int originX, int originY)
         {
             this._destX = destX;
             this._destY = destY;
             this._originX = originX;
             this._originY = originY;
+            this._x = originX;
+            this._y = originY;
 
             this._distance = mathHelper.distance(_originX, _originY, _destX, _destY);
         }
 
         public void Update(int interval)
         {
-            _completionIndex += BURGER_SPEED/ Convert.ToSingle(_distance);
+            _completionIndex += BURGER_SPEED / Convert.ToSingle(_distance);
 
-            
             _x = _originX + ((_destX - _originX) * _completionIndex);
             _y = _originY + ((_destY - _originY) * _completionIndex);
         }
