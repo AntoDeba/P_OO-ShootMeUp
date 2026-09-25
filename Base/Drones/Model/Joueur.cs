@@ -7,16 +7,21 @@ namespace ShootMeUp
     // Cette partie de la classe Drone définit ce qu'est un drone par un modèle numérique
     public class Joueur
     {
-        private int x;                                           // Position en X depuis la gauche de l'espace aérien
-        private int y;                                           // Position en Y depuis le haut de l'espace aérien
-        private const int SPEED = 20;                           // Vitesse du joueur
+        private int x;                                              // Position en X depuis la gauche de l'espace aérien
+        private int y;                                              // Position en Y depuis le haut de l'espace aérien
+        private const int SPEED = 20;                               // Vitesse du joueur
         private const int PLAYER_HEIGHT = 50;
         private const int PLAYER_WIDTH = 50;
-        private List<char> keysPressed = new List<char>();  //Liste des touches pressé
+        private List<char> keysPressed = new List<char>();          //Liste des touches pressé
+        private int _framesSinceLastShot = 0;                       //Nombres de frame depuis la dernieres balle tirée
+        private int _framesSinceLastMeleeAtack = 0;                 //Nombre de frane depuis la derniere attaque de mélée
+        private const int SHOOTING_RELAOD_TIME = 10;                //Temps de rechargement
+        private const int MELEE_RELAOD_TIME = 2;                    //Temps de rechargement
+        private bool _modeMelee = false;                            //Vrai quand 
+
+
         public List<char> KeysPressed { get => keysPressed; set => keysPressed = value; }
-        private int _framesSinceLastShot = 0;
-        private int _framesSinceLastMeleeAtack = 0;
-        private const int SHOOTING_RELAOD_TIME = 10;
+        public bool ModeMelee { get => _modeMelee; }
 
         // Constructeur
         public Joueur(int x, int y)
@@ -29,6 +34,8 @@ namespace ShootMeUp
         // que 'interval' millisecondes se sont écoulées
         public void Update(int interval) 
         {
+            Console.WriteLine(_modeMelee);
+
             _framesSinceLastMeleeAtack++;
             _framesSinceLastShot++;
 
@@ -42,6 +49,15 @@ namespace ShootMeUp
                 x -= SPEED;
             if (keysPressed.Contains('D') == true && x < BattleMap.WIDTH-PLAYER_WIDTH)
                 x += SPEED;
+
+            if(_framesSinceLastMeleeAtack == 1)
+            {
+                _modeMelee = true;
+            }
+            else
+            {
+                _modeMelee = false;
+            }
         }
 
         public void mouseInput(MouseEventArgs e)
@@ -59,7 +75,14 @@ namespace ShootMeUp
 
 
             if (e.Button == MouseButtons.Right)
-                return;
+            {
+                if (_framesSinceLastMeleeAtack > MELEE_RELAOD_TIME)
+                {
+                    _framesSinceLastMeleeAtack = 0;
+                }
+            }
+                
+                
             
 
         }

@@ -19,7 +19,6 @@ namespace ShootMeUp
         //Tous les projectiles de type burger
         public static List<projectileBurger> allBurgers = new List<projectileBurger>();
 
-
         BufferedGraphicsContext currentContext;
         BufferedGraphics battleMap;
 
