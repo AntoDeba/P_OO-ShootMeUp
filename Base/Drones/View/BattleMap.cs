@@ -19,6 +19,8 @@ namespace ShootMeUp
         //Tous les projectiles de type burger
         public static List<projectileBurger> allBurgers = new List<projectileBurger>();
 
+        Manager myman = new Manager(40, 40);
+
         BufferedGraphicsContext currentContext;
         BufferedGraphics battleMap;
 
@@ -46,6 +48,8 @@ namespace ShootMeUp
             foreach (projectileBurger monBurger in allBurgers) //affiches les projectils burgers
                 monBurger.Render(battleMap);
 
+            myman.Render(battleMap);
+
             battleMap.Render();
         }
 
@@ -64,6 +68,8 @@ namespace ShootMeUp
                     allBurgers.RemoveAt(i);
                 }
             }
+
+            myman.Update(interval);
         }
 
         // Méthode appelée à chaque frame
