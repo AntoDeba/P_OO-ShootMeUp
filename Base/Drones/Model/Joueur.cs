@@ -1,4 +1,5 @@
-﻿using ShootMeUp.Helpers;
+﻿using Microsoft.VisualBasic.Devices;
+using ShootMeUp.Helpers;
 using ShootMeUp.Properties;
 
 namespace ShootMeUp
@@ -13,8 +14,10 @@ namespace ShootMeUp
         private const int PLAYER_WIDTH = 50;
         private List<char> keysPressed = new List<char>();  //Liste des touches pressé
         public List<char> KeysPressed { get => keysPressed; set => keysPressed = value; }
-        
-        
+        private int _framesSinceLastShot = 0;
+        private int _framesSinceLastMeleeAtack = 0;
+        private const int SHOOTING_RELAOD_TIME = 10;
+
         // Constructeur
         public Joueur(int x, int y)
         {
@@ -26,6 +29,8 @@ namespace ShootMeUp
         // que 'interval' millisecondes se sont écoulées
         public void Update(int interval) 
         {
+            _framesSinceLastMeleeAtack++;
+            _framesSinceLastShot++;
 
             //Modifife la position du joueur en fonction de la touche sur laquelle il appuie en ne dépassant pas les limites.
             //la position change en fonction de la vitesse
@@ -39,10 +44,24 @@ namespace ShootMeUp
                 x += SPEED;
         }
 
-        public void FireBurger(int mouseX, int mouseY)
+        public void mouseInput(MouseEventArgs e)
         {
-            projectileBurger monBurger = new projectileBurger(mouseX,mouseY,x,y);
-            BattleMap.allBurgers.Add(monBurger);
+            if (e.Button == MouseButtons.Left)
+            {
+                if (_framesSinceLastShot >= SHOOTING_RELAOD_TIME)
+                {
+                    projectileBurger monBurger = new projectileBurger(e.X, e.Y, x, y);
+                    BattleMap.allBurgers.Add(monBurger);
+                    _framesSinceLastShot = 0;
+                }
+
+            }
+
+
+            if (e.Button == MouseButtons.Right)
+                return;
+            
+
         }
 
         /// //////////////////////////////////////////////////////////////////////////////
@@ -53,26 +72,16 @@ namespace ShootMeUp
         //  
         /// //////////////////////////////////////////////////////////////////////////////
 
-        private Pen droneBrush = new Pen(new SolidBrush(Color.Purple), 3);
-
-        
 
         // De manière graphique
         public void Render(BufferedGraphics drawingSpace)
         {
             drawingSpace.Graphics.DrawImage(Resources.drone, x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
 
-            //drawingSpace.Graphics.DrawString($"{this}", TextHelpers.drawFont, TextHelpers.writingBrush, x + 5, y - 25);
-        }
+            drawingSpace.Graphics.DrawString($"{this}", TextHelpers.drawFont, TextHelpers.writingBrush, x + 5, y - 25);
 
-        // De manière textuelle
-        
-        /*
-        public override string ToString()
-        {
-            return $"{name} ({((int)((double)charge / 1000 * 100)).ToString()}%)";
         }
-        */
+        
 
     }
 }
