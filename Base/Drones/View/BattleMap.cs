@@ -14,7 +14,7 @@ namespace ShootMeUp
         public static readonly int WIDTH = 1200;        // Dimensions of the airspace
         public static readonly int HEIGHT = 600;
         private char currentlyPressedKey;
-        
+        private DateTime lastBurgerFired = new DateTime();
         private Joueur _player;
 
         //Tous les projectiles de type burger
@@ -36,6 +36,8 @@ namespace ShootMeUp
             // dimensions the same size as the drawing surface of the form.
             battleMap = currentContext.Allocate(this.CreateGraphics(), this.DisplayRectangle);
             this._player = player;
+
+            lastBurgerFired = DateTime.Now;
         }
 
         // Affichage de la situation actuelle
@@ -89,9 +91,17 @@ namespace ShootMeUp
         }
         private void mouseClick(object sender, MouseEventArgs e)
         {
-            if(e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Left)
+            {
+                if(lastBurgerFired.Second != DateTime.Now.Second || lastBurgerFired.Minute != DateTime.Now.Minute)
+                {
+                    _player.FireBurger(e.X, e.Y);
+                    lastBurgerFired = DateTime.Now;
+                }
+                    
+            }
+                
 
-                _player.FireBurger(e.X, e.Y);
             if (e.Button == MouseButtons.Right)
                 return;
             

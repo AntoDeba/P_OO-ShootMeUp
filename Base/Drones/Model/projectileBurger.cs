@@ -36,6 +36,8 @@ namespace ShootMeUp
         public void Update(int interval)
         {
             _completionIndex += BURGER_SPEED/ Convert.ToSingle(_distance);
+
+            
             _x = _originX + ((_destX - _originX) * _completionIndex);
             _y = _originY + ((_destY - _originY) * _completionIndex);
         }
