@@ -11,17 +11,17 @@ namespace ShootMeUp
 {
     public class projectileBurger
     {
-        private int _x;                                           // Position en X depuis la gauche de l'espace aérien
-        private int _y;                                           // Position en Y depuis le haut de l'espace aérien
+        private float _x;                                      // Position en X depuis la gauche de l'espace aérien
+        private float _y;                                      // Position en Y depuis le haut de l'espace aérien
         private int _destX;
         private int _destY;
         private int _originX;
-        private int _originY;
-        private const int SPEED = 20;                           // Vitesse du projectile
+        private int _originY;                       
         private const int BURGER_HEIGHT = 50;                   // hauteur du projectile
         private const int BURGER_WIDTH = 50;                    // largeur du projectile
-        private double _completionIndex = 0;
+        private const int BURGER_SPEED = 30;                    // Vitesse du projectile
         private double _distance;
+        private float _completionIndex = 0;
 
         public projectileBurger(int destX, int destY, int originX, int originY)
         {
@@ -35,7 +35,9 @@ namespace ShootMeUp
 
         public void Update(int interval)
         {
-            
+            _completionIndex += BURGER_SPEED/ Convert.ToSingle(_distance);
+            _x = _originX + ((_destX - _originX) * _completionIndex);
+            _y = _originY + ((_destY - _originY) * _completionIndex);
         }
 
         public void Render(BufferedGraphics drawingSpace)

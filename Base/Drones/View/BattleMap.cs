@@ -90,6 +90,7 @@ namespace ShootMeUp
         private void mouseClick(object sender, MouseEventArgs e)
         {
             if(e.Button == MouseButtons.Left)
+
                 _player.FireBurger(e.X, e.Y);
             if (e.Button == MouseButtons.Right)
                 return;
