@@ -16,6 +16,7 @@ namespace ShootMeUp
         public static readonly int HEIGHT = 600;
         private char currentlyPressedKey;
         private Joueur _player;
+        private const int NUMBER_OF_MANAGERS = 7;
 
         //Tous les projectiles de type burger
         public static List<projectileBurger> allBurgers = new List<projectileBurger>();
@@ -39,20 +40,10 @@ namespace ShootMeUp
             battleMap = currentContext.Allocate(this.CreateGraphics(), this.DisplayRectangle);
             this._player = player;
 
-            allManagers.Add(new Manager(40, 40, 13));
-            allManagers.Add(new Manager(40, 40, 13));
-            allManagers.Add(new Manager(40, 40, 13));
-            allManagers.Add(new Manager(40, 40, 13));
-            allManagers.Add(new Manager(40, 40, 13));
-            allManagers.Add(new Manager(40, 40, 13));
-            allManagers.Add(new Manager(40, 40, 13));
-            allManagers.Add(new Manager(40, 40, 13));
-            allManagers.Add(new Manager(40, 40, 13));
-            allManagers.Add(new Manager(40, 40, 13));
-            allManagers.Add(new Manager(40, 40, 13));
-            allManagers.Add(new Manager(40, 40, 13));
-            allManagers.Add(new Manager(40, 40, 13));
-        }
+
+
+
+        }   
 
         // Affichage de la situation actuelle
         private void Render()
@@ -78,7 +69,21 @@ namespace ShootMeUp
             foreach (projectileBurger monBurger in allBurgers) //met à jour les projectils
                 monBurger.Update(interval);
 
-            for(int i = allBurgers.Count -1; i >= 0; i--)
+            while (allManagers.Count < NUMBER_OF_MANAGERS)
+            {
+                int i = randomValueHelper.Alea.Next(5);
+                if (i == 0)
+                    allManagers.Add(new Manager(0, randomValueHelper.Alea.Next(BattleMap.HEIGHT), 13));
+                if (i == 1)
+                    allManagers.Add(new Manager(BattleMap.WIDTH, randomValueHelper.Alea.Next(BattleMap.HEIGHT), 13));
+                if (i == 3)
+                    allManagers.Add(new Manager(randomValueHelper.Alea.Next(BattleMap.WIDTH), 0, 13));
+                if (i == 4)
+                    allManagers.Add(new Manager(randomValueHelper.Alea.Next(BattleMap.WIDTH), BattleMap.HEIGHT, 13));
+            }
+            
+
+            for (int i = allBurgers.Count -1; i >= 0; i--)
             {
                 if (allBurgers[i].X > BattleMap.WIDTH || allBurgers[i].Y > BattleMap.HEIGHT || allBurgers[i].X < 0 || allBurgers[i].Y < 0)
                 {

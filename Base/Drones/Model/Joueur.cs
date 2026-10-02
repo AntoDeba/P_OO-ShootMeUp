@@ -108,7 +108,7 @@ namespace ShootMeUp
                 drawingSpace.Graphics.FillEllipse(new SolidBrush(Color.Purple), _x-(PLAYER_WIDTH/2) , _y - (PLAYER_HEIGHT / 2), PLAYER_WIDTH, PLAYER_HEIGHT);
             }
 
-            //drawingSpace.Graphics.DrawString($"{this}", TextHelpers.drawFont, TextHelpers.writingBrush, 5, 25);
+            drawingSpace.Graphics.DrawString($"{this}", TextHelpers.drawFont, TextHelpers.writingBrush, 5, 25);
 
         }
         
