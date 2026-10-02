@@ -48,7 +48,7 @@ namespace ShootMeUp
 
         public void Render(BufferedGraphics drawingSpace)
         {
-            drawingSpace.Graphics.DrawImage(Resources.burger, _x, _y, BURGER_WIDTH, BURGER_HEIGHT);
+            drawingSpace.Graphics.DrawImage(Resources.burger, _x-(BURGER_WIDTH/2), _y - (BURGER_HEIGHT / 2), BURGER_WIDTH, BURGER_HEIGHT);
         }
     }
 }
