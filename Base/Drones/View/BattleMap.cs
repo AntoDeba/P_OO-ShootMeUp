@@ -98,7 +98,10 @@ namespace ShootMeUp
                         allBurgers.RemoveAt(i);
                         allManagers[j].Pv -= projectileBurger.BURGER_DAMAGE;
                         if (allManagers[j].Pv <= 0)
+                        {
                             allManagers.RemoveAt(j);
+                            //_player.Money += 5000; -> Ajuster pour la prochaine fois
+                        }
                         break;
                     }
                 }
@@ -110,7 +113,11 @@ namespace ShootMeUp
                 {
                     allManagers[j].Pv -= Joueur.MELEE_DAMAGE;
                     if (allManagers[j].Pv <= 0)
+                    {
                         allManagers.RemoveAt(j);
+                        _player.Money += 5000;
+                    }
+
                 }
             }
 

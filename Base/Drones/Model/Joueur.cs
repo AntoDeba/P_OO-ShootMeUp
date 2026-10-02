@@ -22,12 +22,13 @@ namespace ShootMeUp
         public const int MELEE_DAMAGE = 3;
         public static readonly int MELEE_RANGE = (int)Math.Round(PLAYER_HEIGHT * 1.5);
         private int _pv = 100;
-
+        private int _money;
 
         public List<char> KeysPressed { get => keysPressed; set => keysPressed = value; }
         public bool ModeMelee { get => _modeMelee; }
         public int Y { get => _y; }
         public int X { get => _x; }
+        public int Money { get => _money; set => _money = value; }
 
         // Constructeur
         public Joueur(int x, int y)
@@ -112,6 +113,7 @@ namespace ShootMeUp
                     drawingSpace.Graphics.FillEllipse(new SolidBrush(Color.Purple), _x - (PLAYER_WIDTH / 2), _y - (PLAYER_HEIGHT / 2), PLAYER_WIDTH, PLAYER_HEIGHT);
                 }
                 drawingSpace.Graphics.DrawString($"{_pv}/100", new Font("Arial", 20), new SolidBrush(Color.Red), 0, BattleMap.HEIGHT - 40);
+                drawingSpace.Graphics.DrawString($"{_money} skibi$", new Font("Arial", 20), new SolidBrush(Color.Green), 0, BattleMap.HEIGHT - 80);
             }
             else
             {
