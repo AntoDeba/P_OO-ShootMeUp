@@ -1,3 +1,4 @@
+using ShootMeUp.Helpers;
 using System.Diagnostics;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
@@ -19,7 +20,8 @@ namespace ShootMeUp
         //Tous les projectiles de type burger
         public static List<projectileBurger> allBurgers = new List<projectileBurger>();
 
-        Manager myman = new Manager(40, 40);
+        public static List<Manager> allManagers = new List<Manager>();
+
 
         BufferedGraphicsContext currentContext;
         BufferedGraphics battleMap;
@@ -36,6 +38,20 @@ namespace ShootMeUp
             // dimensions the same size as the drawing surface of the form.
             battleMap = currentContext.Allocate(this.CreateGraphics(), this.DisplayRectangle);
             this._player = player;
+
+            allManagers.Add(new Manager(40, 40, 13));
+            allManagers.Add(new Manager(40, 40, 13));
+            allManagers.Add(new Manager(40, 40, 13));
+            allManagers.Add(new Manager(40, 40, 13));
+            allManagers.Add(new Manager(40, 40, 13));
+            allManagers.Add(new Manager(40, 40, 13));
+            allManagers.Add(new Manager(40, 40, 13));
+            allManagers.Add(new Manager(40, 40, 13));
+            allManagers.Add(new Manager(40, 40, 13));
+            allManagers.Add(new Manager(40, 40, 13));
+            allManagers.Add(new Manager(40, 40, 13));
+            allManagers.Add(new Manager(40, 40, 13));
+            allManagers.Add(new Manager(40, 40, 13));
         }
 
         // Affichage de la situation actuelle
@@ -48,7 +64,8 @@ namespace ShootMeUp
             foreach (projectileBurger monBurger in allBurgers) //affiches les projectils burgers
                 monBurger.Render(battleMap);
 
-            myman.Render(battleMap);
+            foreach(Manager manager in allManagers)
+                manager.Render(battleMap);
 
             battleMap.Render();
         }
@@ -66,10 +83,34 @@ namespace ShootMeUp
                 if (allBurgers[i].X > BattleMap.WIDTH || allBurgers[i].Y > BattleMap.HEIGHT || allBurgers[i].X < 0 || allBurgers[i].Y < 0)
                 {
                     allBurgers.RemoveAt(i);
+                    continue;
+                }
+                
+                for (int j = allManagers.Count -1; j >= 0; j--)
+                {
+                    if (mathHelper.areTouching(allManagers[j].X, allBurgers[i].X, allManagers[j].Y, allBurgers[i].Y, projectileBurger.BURGER_WIDTH, Manager.MANAGER_WIDTH, projectileBurger.BURGER_HEIGHT, Manager.MANAGER_HEIGHT))
+                    {
+                        allBurgers.RemoveAt(i);
+                        allManagers[j].Pv -= projectileBurger.BURGER_DAMAGE;
+                        if (allManagers[j].Pv <= 0)
+                            allManagers.RemoveAt(j);
+                        break;
+                    }
+                }
+            }
+            
+            for (int j = allManagers.Count - 1; j >= 0; j--)
+            {
+                if (mathHelper.areTouching(allManagers[j].X, _player.X, allManagers[j].Y, _player.Y, Joueur.PLAYER_WIDTH + Joueur.MELEE_RANGE, Manager.MANAGER_WIDTH, Joueur.PLAYER_HEIGHT + Joueur.MELEE_RANGE, Manager.MANAGER_HEIGHT) && _player.ModeMelee)
+                {
+                    allManagers[j].Pv -= Joueur.MELEE_DAMAGE;
+                    if (allManagers[j].Pv <= 0)
+                        allManagers.RemoveAt(j);
                 }
             }
 
-            myman.Update(interval);
+            foreach (Manager manager in allManagers)
+                manager.Update(interval);
         }
 
         // Méthode appelée à chaque frame

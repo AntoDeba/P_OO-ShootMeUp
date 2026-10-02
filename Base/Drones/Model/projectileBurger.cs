@@ -17,11 +17,12 @@ namespace ShootMeUp
         private int _destY;
         private int _originX;
         private int _originY;                       
-        private const int BURGER_HEIGHT = 50;                   // hauteur du projectile
-        private const int BURGER_WIDTH = 50;                    // largeur du projectile
+        public const int BURGER_HEIGHT = 50;                   // hauteur du projectile
+        public const int BURGER_WIDTH = 50;                    // largeur du projectile
         private const int BURGER_SPEED = 30;                    // Vitesse du projectile
         private double _distance;
         private float _completionIndex = 0;
+        public const int BURGER_DAMAGE = 5;
 
         public float X { get => _x;}
         public float Y { get => _y; }

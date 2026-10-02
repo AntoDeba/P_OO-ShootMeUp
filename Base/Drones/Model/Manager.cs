@@ -18,17 +18,23 @@ namespace ShootMeUp
         private float _originX;
         private float _originY;
         private const int MANAGER_SPEED = 10;                    // Vitesse du Managaer
-        private const int MANAGER_WIDTH = 45;
-        private const int MANAGER_HEIGHT = 80;
+        public const int MANAGER_WIDTH = 45;
+        public const int MANAGER_HEIGHT = 80;
         private double _distance;
         private float _completionIndex = 1;
-        
-        public Manager(int x, int y)
+        private int _pv;
+
+        public int Pv { get => _pv; set => _pv = value; }
+        public float X { get => _x;  }
+        public float Y { get => _y;  }
+
+        public Manager(int x, int y, int pv)
         {
             _x = x;
             _y = y;
             _originX = x;
             _originY = y;
+            _pv = pv;
         }
 
         public void Update(int interval)
@@ -56,6 +62,7 @@ namespace ShootMeUp
         public void Render(BufferedGraphics drawingSpace)
         {
             drawingSpace.Graphics.DrawImage(Resources.Manager, _x - (MANAGER_WIDTH/2), _y - (MANAGER_HEIGHT/2), MANAGER_WIDTH, MANAGER_HEIGHT);
+            drawingSpace.Graphics.DrawString($"{_pv}/13", TextHelpers.drawFont, new SolidBrush(Color.Red), _x - (MANAGER_WIDTH / 2), _y - (MANAGER_HEIGHT / 2) - 10);
         }
     }
 }
