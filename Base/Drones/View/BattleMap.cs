@@ -50,13 +50,13 @@ namespace ShootMeUp
         {
             battleMap.Graphics.Clear(Color.AliceBlue);
 
-            _player.Render(battleMap);
-
             foreach (projectileBurger monBurger in allBurgers) //affiches les projectils burgers
                 monBurger.Render(battleMap);
 
             foreach(Manager manager in allManagers)
                 manager.Render(battleMap);
+
+            _player.Render(battleMap);
 
             battleMap.Render();
         }

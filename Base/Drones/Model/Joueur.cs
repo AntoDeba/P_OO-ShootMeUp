@@ -20,7 +20,8 @@ namespace ShootMeUp
         private const int MELEE_RELAOD_TIME = 2;                    //Temps de rechargement
         private bool _modeMelee = false;                            //Vrai quand 
         public const int MELEE_DAMAGE = 3;
-        public static readonly int MELEE_RANGE = (int)Math.Round(PLAYER_HEIGHT * 1.5); 
+        public static readonly int MELEE_RANGE = (int)Math.Round(PLAYER_HEIGHT * 1.5);
+        private int _pv = 100;
 
 
         public List<char> KeysPressed { get => keysPressed; set => keysPressed = value; }
@@ -67,7 +68,7 @@ namespace ShootMeUp
         {
             if (e.Button == MouseButtons.Left)
             {
-                if (_framesSinceLastShot >= SHOOTING_RELAOD_TIME)
+                if (_framesSinceLastShot >= SHOOTING_RELAOD_TIME && _pv > 0)
                 {
                     projectileBurger monBurger = new projectileBurger(e.X, e.Y, _x, _y);
                     BattleMap.allBurgers.Add(monBurger);
@@ -79,7 +80,7 @@ namespace ShootMeUp
 
             if (e.Button == MouseButtons.Right)
             {
-                if (_framesSinceLastMeleeAtack > MELEE_RELAOD_TIME)
+                if (_framesSinceLastMeleeAtack > MELEE_RELAOD_TIME && _pv > 0)
                 {
                     _framesSinceLastMeleeAtack = 0;
                 }
@@ -102,14 +103,21 @@ namespace ShootMeUp
         // De manière graphique
         public void Render(BufferedGraphics drawingSpace)
         {
-            drawingSpace.Graphics.DrawImage(Resources.drone, _x - (PLAYER_WIDTH / 2), _y - (PLAYER_HEIGHT / 2), PLAYER_WIDTH, PLAYER_HEIGHT);
-            if(_modeMelee == true)
+            
+            if(_pv > 0)
             {
-                drawingSpace.Graphics.FillEllipse(new SolidBrush(Color.Purple), _x-(PLAYER_WIDTH/2) , _y - (PLAYER_HEIGHT / 2), PLAYER_WIDTH, PLAYER_HEIGHT);
+                drawingSpace.Graphics.DrawImage(Resources.drone, _x - (PLAYER_WIDTH / 2), _y - (PLAYER_HEIGHT / 2), PLAYER_WIDTH, PLAYER_HEIGHT);
+                if (_modeMelee == true)
+                {
+                    drawingSpace.Graphics.FillEllipse(new SolidBrush(Color.Purple), _x - (PLAYER_WIDTH / 2), _y - (PLAYER_HEIGHT / 2), PLAYER_WIDTH, PLAYER_HEIGHT);
+                }
+                drawingSpace.Graphics.DrawString($"{_pv}/100", new Font("Arial", 20), new SolidBrush(Color.Red), 0, BattleMap.HEIGHT - 40);
             }
-
-            drawingSpace.Graphics.DrawString($"{this}", TextHelpers.drawFont, TextHelpers.writingBrush, 5, 25);
-
+            else
+            {
+                drawingSpace.Graphics.DrawString($"Vous avez perdu !", new Font("Arial", 40), new SolidBrush(Color.Red), (BattleMap.WIDTH / 2)-150, BattleMap.HEIGHT/2-30);
+                drawingSpace.Graphics.DrawString($"Vous avez été licencié de la corporation Wacdonald's™ et n'obtiendrez aucune compentation de salaire", new Font("Arial", 15), new SolidBrush(Color.Red) , 150, (BattleMap.HEIGHT / 2)+ 30);
+            }
         }
         
 
