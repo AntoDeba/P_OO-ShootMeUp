@@ -153,6 +153,21 @@ namespace ShootMeUp
                 }
             }
 
+            for (int i = allMoneyBags.Count - 1; i >= 0; i--)
+            {
+                if (allMoneyBags[i].X > BattleMap.WIDTH || allMoneyBags[i].Y > BattleMap.HEIGHT || allMoneyBags[i].X < 0 || allMoneyBags[i].Y < 0)
+                {
+                    allMoneyBags.RemoveAt(i);
+                    continue;
+                }
+
+                //Vérifie si le joueur à été touché par un sac d'
+                if (mathHelper.areTouching(_player.X, allMoneyBags[i].X, _player.Y, allMoneyBags[i].Y, Joueur.PLAYER_WIDTH, moneyBag.MONEY_BAG_WIDTH, Joueur.PLAYER_HEIGHT, moneyBag.MONEY_BAG_HEIGHT))
+                {
+                    _player.Health -= allMoneyBags[i].Damage;
+                    allMoneyBags.RemoveAt(i);
+                }
+            }
 
         }
 

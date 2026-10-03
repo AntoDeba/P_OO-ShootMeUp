@@ -30,6 +30,7 @@ namespace ShootMeUp
         public int Y { get => _y; }
         public int X { get => _x; }
         public int Money { get => _money; set => _money = value; }
+        public int Health { get => _health; set => _health = value; }
 
         // Constructeur
         public Joueur(int x, int y)

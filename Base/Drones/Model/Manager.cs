@@ -30,7 +30,8 @@ namespace ShootMeUp
         private int _managerLevel;
         const int MANAGER_LOOT_AT_START = 5000;     //Argent qu'un manager fait tomber au début (évolue avec les niveaux)
         const int MANAGER_HEALTH_START = 13;        //PV d'un manager au début (évolue avec les niveaux) 
-        
+        private int _projectileDamage;               //Dégats effectuer par les sacs (évolue avec les niveaux)
+
 
         public int Health { get => _health; set => _health = value; }
         public float X { get => _x;  }
@@ -49,16 +50,19 @@ namespace ShootMeUp
             {
                 _health = MANAGER_HEALTH_START;
                 _loot = MANAGER_LOOT_AT_START;
+                _projectileDamage = 10;
             }
             if (_managerLevel == 2)
             {
                 _health = MANAGER_HEALTH_START * 2;
                 _loot = MANAGER_LOOT_AT_START * 4;
+                _projectileDamage = 15;
             }
             if (_managerLevel == 3)
             {
                 _health = MANAGER_HEALTH_START * 4;
                 _loot = MANAGER_LOOT_AT_START * 16;
+                _projectileDamage = 20;
             }
             
             _initalHealt = _health;
@@ -90,7 +94,7 @@ namespace ShootMeUp
 
             if(_fireFrame % 40 == 0)
             {
-                BattleMap.allMoneyBags.Add(new moneyBag(BattleMap.Player.X, BattleMap.Player.Y, (int)Math.Round(_x) , (int)Math.Round(_y), 4)); //Toutes les 4 secondes on tire un burger en direction du joueur
+                BattleMap.allMoneyBags.Add(new moneyBag(BattleMap.Player.X, BattleMap.Player.Y, (int)Math.Round(_x) , (int)Math.Round(_y), _projectileDamage)); //Toutes les 4 secondes on tire un burger en direction du joueur
             }
         }
 

@@ -21,10 +21,11 @@ namespace ShootMeUp
         private const int MONEY_BAG_SPEED = 30;                   // Vitesse du projectile
         private double _distance;
         private float _completionIndex = 0;
-        public int _damage;
+        private int _damage;
 
         public float X { get => _x; }
         public float Y { get => _y; }
+        public int Damage { get => _damage; }
 
         public moneyBag(int destX, int destY, int originX, int originY, int damage)
         {
