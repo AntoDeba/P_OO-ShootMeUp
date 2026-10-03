@@ -6,17 +6,24 @@ using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace ShootMeUp
 {
-    // La classe AirSpace représente le territoire au dessus duquel les drones peuvent voler
+    // La classe BattleMap représente le territoire au dessus duquel le joueur peut jouer
     // Il s'agit d'un formulaire (une fenêtre) qui montre une vue 2D depuis en dessus
     // Il n'y a donc pas de notion d'altitude qui intervient
 
     public partial class BattleMap : Form
     {
-        public static readonly int WIDTH = 1200;        // Dimensions of the airspace
+        public static readonly int WIDTH = 1200;            // Dimensions of the airspace
         public static readonly int HEIGHT = 600;
         private char currentlyPressedKey;
         private Joueur _player;
-        private const int NUMBER_OF_MANAGERS = 7;
+        private const int NUMBER_OF_MANAGERS = 7;           //Nombre d'ennemie manager qu'il doit en tout temps avoir sur la carte
+        
+        private int _managerHealth;                         //PV d'un manager
+        private int _mangerLootAtDeath;                     //Argent que fais tomber un manager à la mort
+        private const int LEVEL_TWO_THRESHHOLD = 100000;    //Argent à partir duquel les ennemis seront de niveau deux
+        private const int LEVEL_THREE_THRESHHOLD = 500000;  //Argent à partir duquel les ennemis seront de niveau trois
+        private const int MANAGER_LOOT_AT_START = 5000;     //Argent qu'un manager fait tomber au début (évolue avec les niveaux)
+        private const int MANAGER_HEALTH_START = 13;        //PV d'un manager au début (évolue avec les niveaux) 
 
         //Tous les projectiles de type burger
         public static List<projectileBurger> allBurgers = new List<projectileBurger>();
@@ -65,7 +72,24 @@ namespace ShootMeUp
         private void Update(int interval)
         {
             _player.Update(interval);
-            
+
+            if (_player.Money < LEVEL_TWO_THRESHHOLD)
+            {
+                _mangerLootAtDeath = MANAGER_LOOT_AT_START;
+                _managerHealth = MANAGER_HEALTH_START;
+            }
+            else if(_player.Money >=  LEVEL_TWO_THRESHHOLD && _player.Money < LEVEL_THREE_THRESHHOLD)
+            {
+                _mangerLootAtDeath = MANAGER_LOOT_AT_START * 4;
+                _managerHealth = MANAGER_HEALTH_START * 2;
+            }
+            else
+            {
+                _mangerLootAtDeath = MANAGER_LOOT_AT_START * 16;
+                _managerHealth = MANAGER_HEALTH_START * 4;
+            }
+
+
             foreach (projectileBurger monBurger in allBurgers) //met à jour les projectils
                 monBurger.Update(interval);
 
@@ -73,13 +97,13 @@ namespace ShootMeUp
             {
                 int i = randomValueHelper.Alea.Next(5);
                 if (i == 0)
-                    allManagers.Add(new Manager(0, randomValueHelper.Alea.Next(BattleMap.HEIGHT), 13));
+                    allManagers.Add(new Manager(0, randomValueHelper.Alea.Next(BattleMap.HEIGHT), _managerHealth));
                 if (i == 1)
-                    allManagers.Add(new Manager(BattleMap.WIDTH, randomValueHelper.Alea.Next(BattleMap.HEIGHT), 13));
+                    allManagers.Add(new Manager(BattleMap.WIDTH, randomValueHelper.Alea.Next(BattleMap.HEIGHT), _managerHealth));
                 if (i == 3)
-                    allManagers.Add(new Manager(randomValueHelper.Alea.Next(BattleMap.WIDTH), 0, 13));
+                    allManagers.Add(new Manager(randomValueHelper.Alea.Next(BattleMap.WIDTH), 0, _managerHealth));
                 if (i == 4)
-                    allManagers.Add(new Manager(randomValueHelper.Alea.Next(BattleMap.WIDTH), BattleMap.HEIGHT, 13));
+                    allManagers.Add(new Manager(randomValueHelper.Alea.Next(BattleMap.WIDTH), BattleMap.HEIGHT, _managerHealth));
             }
             
 
@@ -91,16 +115,17 @@ namespace ShootMeUp
                     continue;
                 }
                 
+                //Vérifie si un manager à été touché par un burger
                 for (int j = allManagers.Count -1; j >= 0; j--)
                 {
                     if (mathHelper.areTouching(allManagers[j].X, allBurgers[i].X, allManagers[j].Y, allBurgers[i].Y, projectileBurger.BURGER_WIDTH, Manager.MANAGER_WIDTH, projectileBurger.BURGER_HEIGHT, Manager.MANAGER_HEIGHT))
                     {
                         allBurgers.RemoveAt(i);
-                        allManagers[j].Pv -= projectileBurger.BURGER_DAMAGE;
-                        if (allManagers[j].Pv <= 0)
+                        allManagers[j].Health -= projectileBurger.BURGER_DAMAGE;
+                        if (allManagers[j].Health <= 0)
                         {
                             allManagers.RemoveAt(j);
-                            //_player.Money += 5000; -> Ajuster pour la prochaine fois
+                            _player.Money += _mangerLootAtDeath;
                         }
                         break;
                     }
@@ -111,11 +136,11 @@ namespace ShootMeUp
             {
                 if (mathHelper.areTouching(allManagers[j].X, _player.X, allManagers[j].Y, _player.Y, Joueur.PLAYER_WIDTH + Joueur.MELEE_RANGE, Manager.MANAGER_WIDTH, Joueur.PLAYER_HEIGHT + Joueur.MELEE_RANGE, Manager.MANAGER_HEIGHT) && _player.ModeMelee)
                 {
-                    allManagers[j].Pv -= Joueur.MELEE_DAMAGE;
-                    if (allManagers[j].Pv <= 0)
+                    allManagers[j].Health -= Joueur.MELEE_DAMAGE;
+                    if (allManagers[j].Health <= 0)
                     {
                         allManagers.RemoveAt(j);
-                        _player.Money += 5000;
+                        _player.Money += _mangerLootAtDeath;
                     }
 
                 }

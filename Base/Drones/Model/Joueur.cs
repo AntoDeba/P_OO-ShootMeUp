@@ -18,11 +18,12 @@ namespace ShootMeUp
         private int _framesSinceLastMeleeAtack = 0;                 //Nombre de frane depuis la derniere attaque de mélée
         private const int SHOOTING_RELAOD_TIME = 10;                //Temps de rechargement
         private const int MELEE_RELAOD_TIME = 2;                    //Temps de rechargement
-        private bool _modeMelee = false;                            //Vrai quand 
+        private bool _modeMelee = false;                            //Vrai quand le joueur fait une attaque de mélee
         public const int MELEE_DAMAGE = 3;
         public static readonly int MELEE_RANGE = (int)Math.Round(PLAYER_HEIGHT * 1.5);
-        private int _pv = 100;
+        private int _health = 100;
         private int _money;
+        private const int SUM_OF_MONEY_FOR_WINNING = 1000000;
 
         public List<char> KeysPressed { get => keysPressed; set => keysPressed = value; }
         public bool ModeMelee { get => _modeMelee; }
@@ -67,9 +68,10 @@ namespace ShootMeUp
 
         public void mouseInput(MouseEventArgs e)
         {
+
             if (e.Button == MouseButtons.Left)
             {
-                if (_framesSinceLastShot >= SHOOTING_RELAOD_TIME && _pv > 0)
+                if (_framesSinceLastShot >= SHOOTING_RELAOD_TIME && _health > 0)
                 {
                     projectileBurger monBurger = new projectileBurger(e.X, e.Y, _x, _y);
                     BattleMap.allBurgers.Add(monBurger);
@@ -81,7 +83,7 @@ namespace ShootMeUp
 
             if (e.Button == MouseButtons.Right)
             {
-                if (_framesSinceLastMeleeAtack > MELEE_RELAOD_TIME && _pv > 0)
+                if (_framesSinceLastMeleeAtack > MELEE_RELAOD_TIME && _health > 0)
                 {
                     _framesSinceLastMeleeAtack = 0;
                 }
@@ -105,19 +107,25 @@ namespace ShootMeUp
         public void Render(BufferedGraphics drawingSpace)
         {
             
-            if(_pv > 0)
+            if(_health > 0 && _money < SUM_OF_MONEY_FOR_WINNING)
             {
                 drawingSpace.Graphics.DrawImage(Resources.drone, _x - (PLAYER_WIDTH / 2), _y - (PLAYER_HEIGHT / 2), PLAYER_WIDTH, PLAYER_HEIGHT);
                 if (_modeMelee == true)
                 {
                     drawingSpace.Graphics.FillEllipse(new SolidBrush(Color.Purple), _x - (PLAYER_WIDTH / 2), _y - (PLAYER_HEIGHT / 2), PLAYER_WIDTH, PLAYER_HEIGHT);
                 }
-                drawingSpace.Graphics.DrawString($"{_pv}/100", new Font("Arial", 20), new SolidBrush(Color.Red), 0, BattleMap.HEIGHT - 40);
-                drawingSpace.Graphics.DrawString($"{_money} skibi$", new Font("Arial", 20), new SolidBrush(Color.Green), 0, BattleMap.HEIGHT - 80);
+                drawingSpace.Graphics.DrawString($"{_health}/100", new Font("Arial", 20), new SolidBrush(Color.Red), 0, BattleMap.HEIGHT - 40);
+                drawingSpace.Graphics.DrawString($"{_money}$", new Font("Arial", 20), new SolidBrush(Color.Green), 0, BattleMap.HEIGHT - 80);
             }
-            else
+            else if (_money >= SUM_OF_MONEY_FOR_WINNING)
             {
-                drawingSpace.Graphics.DrawString($"Vous avez perdu !", new Font("Arial", 40), new SolidBrush(Color.Red), (BattleMap.WIDTH / 2)-150, BattleMap.HEIGHT/2-30);
+                drawingSpace.Graphics.DrawString($"Vous avez gagné ! Score : {_money}$", new Font("Arial", 30), new SolidBrush(Color.Green), (BattleMap.WIDTH / 2) - 250, BattleMap.HEIGHT / 2 - 30);
+                drawingSpace.Graphics.DrawString($"Vous avez amassé suffisament d'argent pour devenir actionnaire majoritaire de la corporation Wacdonald's™.", new Font("Arial", 15), new SolidBrush(Color.Green), 150, (BattleMap.HEIGHT / 2) + 30);
+            
+            }
+            else if (_health <= 0)
+            {
+                drawingSpace.Graphics.DrawString($"Vous avez perdu ! Score : {_money}$", new Font("Arial", 30), new SolidBrush(Color.Red), (BattleMap.WIDTH / 2)-250, BattleMap.HEIGHT/2-30);
                 drawingSpace.Graphics.DrawString($"Vous avez été licencié de la corporation Wacdonald's™ et n'obtiendrez aucune compentation de salaire", new Font("Arial", 15), new SolidBrush(Color.Red) , 150, (BattleMap.HEIGHT / 2)+ 30);
             }
         }
