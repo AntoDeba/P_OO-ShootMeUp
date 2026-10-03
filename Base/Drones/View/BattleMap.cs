@@ -15,7 +15,7 @@ namespace ShootMeUp
         public static readonly int WIDTH = 1200;            // Dimensions of the airspace
         public static readonly int HEIGHT = 600;
         private char currentlyPressedKey;
-        private Joueur _player;
+        private static Joueur _player;
         private const int NUMBER_OF_MANAGERS = 7;           //Nombre d'ennemie manager qu'il doit en tout temps avoir sur la carte
         
         private int _managerHealth;                         //PV d'un manager
@@ -28,11 +28,15 @@ namespace ShootMeUp
         //Tous les projectiles de type burger
         public static List<projectileBurger> allBurgers = new List<projectileBurger>();
 
+        public static List<moneyBag> allMoneyBags = new List<moneyBag>();
+
         public static List<Manager> allManagers = new List<Manager>();
 
 
         BufferedGraphicsContext currentContext;
         BufferedGraphics battleMap;
+
+        public static Joueur Player { get => _player;}
 
         // Initialisation de l'espace aérien avec un certain nombre de drones
         public BattleMap(Joueur player)
@@ -45,10 +49,10 @@ namespace ShootMeUp
             // Creates a BufferedGraphics instance associated with this form, and with
             // dimensions the same size as the drawing surface of the form.
             battleMap = currentContext.Allocate(this.CreateGraphics(), this.DisplayRectangle);
-            this._player = player;
+            _player = player;
 
 
-
+            
 
         }   
 
@@ -63,6 +67,9 @@ namespace ShootMeUp
             foreach(Manager manager in allManagers)
                 manager.Render(battleMap);
 
+            foreach (moneyBag moneyBag in allMoneyBags)
+                moneyBag.Render(battleMap);
+
             _player.Render(battleMap);
 
             battleMap.Render();
@@ -72,6 +79,15 @@ namespace ShootMeUp
         private void Update(int interval)
         {
             _player.Update(interval);
+
+            foreach (projectileBurger monBurger in allBurgers) //met à jour les projectils burger
+                monBurger.Update(interval);
+
+            foreach (moneyBag moneyBag in allMoneyBags)
+                moneyBag.Update(interval);
+
+            foreach (Manager manager in allManagers)
+                manager.Update(interval);
 
             if (_player.Money < LEVEL_TWO_THRESHHOLD)
             {
@@ -88,10 +104,6 @@ namespace ShootMeUp
                 _mangerLootAtDeath = MANAGER_LOOT_AT_START * 16;
                 _managerHealth = MANAGER_HEALTH_START * 4;
             }
-
-
-            foreach (projectileBurger monBurger in allBurgers) //met à jour les projectils
-                monBurger.Update(interval);
 
             while (allManagers.Count < NUMBER_OF_MANAGERS)
             {
@@ -146,8 +158,7 @@ namespace ShootMeUp
                 }
             }
 
-            foreach (Manager manager in allManagers)
-                manager.Update(interval);
+
         }
 
         // Méthode appelée à chaque frame

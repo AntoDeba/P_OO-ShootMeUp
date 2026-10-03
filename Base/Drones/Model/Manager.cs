@@ -3,6 +3,7 @@ using ShootMeUp.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,7 @@ namespace ShootMeUp
         private float _completionIndex = 1;
         private int _health;
         private int _initalHealt;
+        private int _fireFrame;                                 //Toute les 40 frames on tire
 
         public int Health { get => _health; set => _health = value; }
         public float X { get => _x;  }
@@ -37,10 +39,14 @@ namespace ShootMeUp
             _originY = y;
             _health = health;
             _initalHealt = health;
+
+            _fireFrame = randomValueHelper.Alea.Next(40);       //Ajout d'aléatoire pour pas que tout les manager tire en même temps.
         }
 
         public void Update(int interval)
         {
+            _fireFrame++;
+
             if (_completionIndex >= 1)
             {
                 _originX = _x;
@@ -59,6 +65,10 @@ namespace ShootMeUp
                 _y = _originY + ((_destY - _originY) * _completionIndex);
             }
 
+            if(_fireFrame % 40 == 0)
+            {
+                BattleMap.allMoneyBags.Add(new moneyBag(BattleMap.Player.X, BattleMap.Player.Y, (int)Math.Round(_x) , (int)Math.Round(_y), 4)); //Toutes les 4 secondes on tire un burger en direction du joueur
+            }
         }
 
         public void Render(BufferedGraphics drawingSpace)
