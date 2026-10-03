@@ -24,21 +24,44 @@ namespace ShootMeUp
         private double _distance;
         private float _completionIndex = 1;
         private int _health;
+        private int _loot;                          //Argent qu'un manager fait tomber
         private int _initalHealt;
-        private int _fireFrame;                                 //Toute les 40 frames on tire
+        private int _fireFrame;                     //Toute les 40 frames on tire
+        private int _managerLevel;
+        const int MANAGER_LOOT_AT_START = 5000;     //Argent qu'un manager fait tomber au début (évolue avec les niveaux)
+        const int MANAGER_HEALTH_START = 13;        //PV d'un manager au début (évolue avec les niveaux) 
+        
 
         public int Health { get => _health; set => _health = value; }
         public float X { get => _x;  }
         public float Y { get => _y;  }
+        public int Loot { get => _loot;}
 
-        public Manager(int x, int y, int health)
+        public Manager(int x, int y, int managerLevel)
         {
             _x = x;
             _y = y;
             _originX = x;
             _originY = y;
-            _health = health;
-            _initalHealt = health;
+            _managerLevel = managerLevel;
+
+            if(_managerLevel == 1)
+            {
+                _health = MANAGER_HEALTH_START;
+                _loot = MANAGER_LOOT_AT_START;
+            }
+            if (_managerLevel == 2)
+            {
+                _health = MANAGER_HEALTH_START * 2;
+                _loot = MANAGER_LOOT_AT_START * 4;
+            }
+            if (_managerLevel == 3)
+            {
+                _health = MANAGER_HEALTH_START * 4;
+                _loot = MANAGER_LOOT_AT_START * 16;
+            }
+            
+            _initalHealt = _health;
 
             _fireFrame = randomValueHelper.Alea.Next(40);       //Ajout d'aléatoire pour pas que tout les manager tire en même temps.
         }

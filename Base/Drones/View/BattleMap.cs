@@ -16,14 +16,12 @@ namespace ShootMeUp
         public static readonly int HEIGHT = 600;
         private char currentlyPressedKey;
         private static Joueur _player;
-        private const int NUMBER_OF_MANAGERS = 7;           //Nombre d'ennemie manager qu'il doit en tout temps avoir sur la carte
         
-        private int _managerHealth;                         //PV d'un manager
-        private int _mangerLootAtDeath;                     //Argent que fais tomber un manager à la mort
+        private const int NUMBER_OF_MANAGERS = 7;           //Nombre d'ennemie manager qu'il doit en tout temps avoir sur la carte
         private const int LEVEL_TWO_THRESHHOLD = 100000;    //Argent à partir duquel les ennemis seront de niveau deux
         private const int LEVEL_THREE_THRESHHOLD = 500000;  //Argent à partir duquel les ennemis seront de niveau trois
-        private const int MANAGER_LOOT_AT_START = 5000;     //Argent qu'un manager fait tomber au début (évolue avec les niveaux)
-        private const int MANAGER_HEALTH_START = 13;        //PV d'un manager au début (évolue avec les niveaux) 
+        private int _currentLevel;
+
 
         //Tous les projectiles de type burger
         public static List<projectileBurger> allBurgers = new List<projectileBurger>();
@@ -91,31 +89,28 @@ namespace ShootMeUp
 
             if (_player.Money < LEVEL_TWO_THRESHHOLD)
             {
-                _mangerLootAtDeath = MANAGER_LOOT_AT_START;
-                _managerHealth = MANAGER_HEALTH_START;
+                _currentLevel = 1;
             }
             else if(_player.Money >=  LEVEL_TWO_THRESHHOLD && _player.Money < LEVEL_THREE_THRESHHOLD)
             {
-                _mangerLootAtDeath = MANAGER_LOOT_AT_START * 4;
-                _managerHealth = MANAGER_HEALTH_START * 2;
+                _currentLevel = 2;
             }
             else
             {
-                _mangerLootAtDeath = MANAGER_LOOT_AT_START * 16;
-                _managerHealth = MANAGER_HEALTH_START * 4;
+                _currentLevel = 3;
             }
 
             while (allManagers.Count < NUMBER_OF_MANAGERS)
             {
                 int i = randomValueHelper.Alea.Next(5);
                 if (i == 0)
-                    allManagers.Add(new Manager(0, randomValueHelper.Alea.Next(BattleMap.HEIGHT), _managerHealth));
+                    allManagers.Add(new Manager(0, randomValueHelper.Alea.Next(BattleMap.HEIGHT), _currentLevel));
                 if (i == 1)
-                    allManagers.Add(new Manager(BattleMap.WIDTH, randomValueHelper.Alea.Next(BattleMap.HEIGHT), _managerHealth));
+                    allManagers.Add(new Manager(BattleMap.WIDTH, randomValueHelper.Alea.Next(BattleMap.HEIGHT), _currentLevel));
                 if (i == 3)
-                    allManagers.Add(new Manager(randomValueHelper.Alea.Next(BattleMap.WIDTH), 0, _managerHealth));
+                    allManagers.Add(new Manager(randomValueHelper.Alea.Next(BattleMap.WIDTH), 0, _currentLevel));
                 if (i == 4)
-                    allManagers.Add(new Manager(randomValueHelper.Alea.Next(BattleMap.WIDTH), BattleMap.HEIGHT, _managerHealth));
+                    allManagers.Add(new Manager(randomValueHelper.Alea.Next(BattleMap.WIDTH), BattleMap.HEIGHT, _currentLevel));
             }
             
 
@@ -136,8 +131,8 @@ namespace ShootMeUp
                         allManagers[j].Health -= projectileBurger.BURGER_DAMAGE;
                         if (allManagers[j].Health <= 0)
                         {
+                            _player.Money += allManagers[j].Loot;
                             allManagers.RemoveAt(j);
-                            _player.Money += _mangerLootAtDeath;
                         }
                         break;
                     }
@@ -151,8 +146,8 @@ namespace ShootMeUp
                     allManagers[j].Health -= Joueur.MELEE_DAMAGE;
                     if (allManagers[j].Health <= 0)
                     {
+                        _player.Money += allManagers[j].Loot;
                         allManagers.RemoveAt(j);
-                        _player.Money += _mangerLootAtDeath;
                     }
 
                 }
