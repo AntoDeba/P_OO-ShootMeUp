@@ -11,8 +11,8 @@ namespace ShootMeUp
         private int _x;                                              // Position en X depuis la gauche de l'espace aérien
         private int _y;                                              // Position en Y depuis le haut de l'espace aérien
         private const int SPEED = 20;                               // Vitesse du joueur
-        public const int PLAYER_HEIGHT = 50;
-        public const int PLAYER_WIDTH = 50;
+        public const int PLAYER_HEIGHT = 98;
+        public const int PLAYER_WIDTH = 36;
         private List<char> keysPressed = new List<char>();          //Liste des touches pressé
         private int _framesSinceLastShot = 0;                       //Nombres de frame depuis la dernieres balle tirée
         private int _framesSinceLastMeleeAtack = 0;                 //Nombre de frane depuis la derniere attaque de mélée
@@ -110,7 +110,7 @@ namespace ShootMeUp
             
             if(_health > 0 && _money < SUM_OF_MONEY_FOR_WINNING)
             {
-                drawingSpace.Graphics.DrawImage(Resources.drone, _x - (PLAYER_WIDTH / 2), _y - (PLAYER_HEIGHT / 2), PLAYER_WIDTH, PLAYER_HEIGHT);
+                drawingSpace.Graphics.DrawImage(Resources.joueur, _x - (PLAYER_WIDTH / 2), _y - (PLAYER_HEIGHT / 2), PLAYER_WIDTH, PLAYER_HEIGHT);
                 if (_modeMelee == true)
                 {
                     drawingSpace.Graphics.FillEllipse(new SolidBrush(Color.Purple), _x - (PLAYER_WIDTH / 2), _y - (PLAYER_HEIGHT / 2), PLAYER_WIDTH, PLAYER_HEIGHT);
