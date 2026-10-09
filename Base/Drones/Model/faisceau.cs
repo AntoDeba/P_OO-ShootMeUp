@@ -22,7 +22,7 @@ namespace ShootMeUp.Model
 
         public float X { get => _x; }
         public float Y { get => _y; }
-
+        public char Direction { get => _direction; set => _direction = value; }
 
         public faisceau(float originX, float originY, char direction)
         {

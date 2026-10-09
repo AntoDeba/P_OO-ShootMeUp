@@ -165,10 +165,25 @@ namespace ShootMeUp
                 }
 
 
+                //On regarde si l'element existe toujours. Si il n'existe pas, une exception est lever et on passe à tour suivant
+                try
+                {
+                    if (allBurgers[i].X == 1) 
+                    {
+                        //Rien faire
+                    }
+                }
+                catch
+                {
+                    continue;
+                }
+
+
+
                 //Vérifie si un robot à été touché par un burger
                 for (int j = allRobots.Count - 1; j >= 0; j--)
                 {
-                    if (mathHelper.areTouching(allRobots[j].X, allRobots[i].X, allRobots[j].Y, allRobots[i].Y, projectileBurger.BURGER_WIDTH, Robot.ROBOT_WIDTH, projectileBurger.BURGER_HEIGHT, Robot.ROBOT_HEIGHT))
+                    if (mathHelper.areTouching(allRobots[j].X, allBurgers[i].X, allRobots[j].Y, allBurgers[i].Y, projectileBurger.BURGER_WIDTH, Robot.ROBOT_WIDTH, projectileBurger.BURGER_HEIGHT, Robot.ROBOT_HEIGHT))
                     {
                         allBurgers.RemoveAt(i);
                         allRobots[j].Health -= projectileBurger.BURGER_DAMAGE;
@@ -221,6 +236,23 @@ namespace ShootMeUp
                 {
                     _player.Health -= allMoneyBags[i].Damage;
                     allMoneyBags.RemoveAt(i);
+                }
+            }
+
+            for (int i = allFaisceaux.Count - 1; i >= 0; i--)
+            {
+                if (allFaisceaux[i].X > BattleMap.WIDTH || allFaisceaux[i].Y > BattleMap.HEIGHT || allFaisceaux[i].X < 0 || allFaisceaux[i].Y < 0)
+                {
+                    allFaisceaux.RemoveAt(i);
+                    continue;
+                }
+
+                //Vérifie si le joueur à été touché par un vaisseau. On doit prendre en compte le fait que la forme du faisceau peut être de deux manière différente en fonction de son orientation
+                if ((mathHelper.areTouching(_player.X, allFaisceaux[i].X, _player.Y, allFaisceaux[i].Y, Joueur.PLAYER_WIDTH, faisceau.BEAM_WIDTH, Joueur.PLAYER_HEIGHT, faisceau.BEAM_HEIGHT) && (allFaisceaux[i].Direction == 'O' || allFaisceaux[i].Direction == 'E'))
+                    || (mathHelper.areTouching(_player.X, allFaisceaux[i].X, _player.Y, allFaisceaux[i].Y, Joueur.PLAYER_WIDTH, faisceau.BEAM_HEIGHT, Joueur.PLAYER_HEIGHT, faisceau.BEAM_WIDTH) && (allFaisceaux[i].Direction == 'N' || allFaisceaux[i].Direction == 'S')))
+                {
+                    _player.Health -= faisceau.BEAM_DAMAGE;
+                    allFaisceaux.RemoveAt(i);
                 }
             }
 
