@@ -99,5 +99,15 @@ namespace ShootMeUp.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap robot {
+            get {
+                object obj = ResourceManager.GetObject("robot", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

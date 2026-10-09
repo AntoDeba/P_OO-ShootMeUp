@@ -1,4 +1,5 @@
 using ShootMeUp.Helpers;
+using ShootMeUp.Model;
 using System.Diagnostics;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
@@ -17,7 +18,8 @@ namespace ShootMeUp
         private char currentlyPressedKey;
         private static Joueur _player;
         
-        private const int NUMBER_OF_MANAGERS = 7;           //Nombre d'ennemie manager qu'il doit en tout temps avoir sur la carte
+        private const int NUMBER_OF_ROBOTS = 4;           //Nombre d'ennemie manager qu'il doit en tout temps avoir sur la carte
+        private const int NUMBER_OF_MANAGERS = 7;           //Nombre d'ennemie robot qu'il doit en tout temps avoir sur la carte à partir du niveau 2
         private const int LEVEL_TWO_THRESHHOLD = 100000;    //Argent à partir duquel les ennemis seront de niveau deux
         private const int LEVEL_THREE_THRESHHOLD = 500000;  //Argent à partir duquel les ennemis seront de niveau trois
         private int _currentLevel;
@@ -29,6 +31,7 @@ namespace ShootMeUp
         public static List<moneyBag> allMoneyBags = new List<moneyBag>();
 
         public static List<Manager> allManagers = new List<Manager>();
+        public static List<Robot> allRobots = new List<Robot>();
 
 
         BufferedGraphicsContext currentContext;
@@ -68,6 +71,9 @@ namespace ShootMeUp
             foreach (moneyBag moneyBag in allMoneyBags)
                 moneyBag.Render(battleMap);
 
+            foreach (Robot robot in allRobots)
+                robot.Render(battleMap);
+
             _player.Render(battleMap);
 
             battleMap.Render();
@@ -86,6 +92,9 @@ namespace ShootMeUp
 
             foreach (Manager manager in allManagers)
                 manager.Update(interval);
+            
+            foreach (Robot robot in allRobots)
+                robot.Update(interval);
 
             if (_player.Money < LEVEL_TWO_THRESHHOLD)
             {
@@ -112,7 +121,20 @@ namespace ShootMeUp
                 if (i == 4)
                     allManagers.Add(new Manager(randomValueHelper.Alea.Next(BattleMap.WIDTH), BattleMap.HEIGHT, _currentLevel));
             }
-            
+
+            while (allRobots.Count < NUMBER_OF_ROBOTS && _currentLevel > 1)
+            {
+                int i = randomValueHelper.Alea.Next(5);
+                if (i == 0)
+                    allRobots.Add(new Robot(0, randomValueHelper.Alea.Next(BattleMap.HEIGHT), _currentLevel));
+                if (i == 1)
+                    allRobots.Add(new Robot(BattleMap.WIDTH, randomValueHelper.Alea.Next(BattleMap.HEIGHT), _currentLevel));
+                if (i == 3)
+                    allRobots.Add(new Robot(randomValueHelper.Alea.Next(BattleMap.WIDTH), 0, _currentLevel));
+                if (i == 4)
+                    allRobots.Add(new Robot(randomValueHelper.Alea.Next(BattleMap.WIDTH), BattleMap.HEIGHT, _currentLevel));
+            }
+
 
             for (int i = allBurgers.Count -1; i >= 0; i--)
             {
@@ -137,6 +159,22 @@ namespace ShootMeUp
                         break;
                     }
                 }
+
+
+                //Vérifie si un robot à été touché par un burger
+                for (int j = allRobots.Count - 1; j >= 0; j--)
+                {
+                    if (mathHelper.areTouching(allRobots[j].X, allRobots[i].X, allRobots[j].Y, allRobots[i].Y, projectileBurger.BURGER_WIDTH, Robot.ROBOT_WIDTH, projectileBurger.BURGER_HEIGHT, Robot.ROBOT_HEIGHT))
+                    {
+                        allBurgers.RemoveAt(i);
+                        allRobots[j].Health -= projectileBurger.BURGER_DAMAGE;
+                        if (allRobots[j].Health <= 0)
+                        {
+                            allRobots.RemoveAt(j);
+                        }
+                        break;
+                    }
+                }
             }
             
             for (int j = allManagers.Count - 1; j >= 0; j--)
@@ -148,6 +186,19 @@ namespace ShootMeUp
                     {
                         _player.Money += allManagers[j].Loot;
                         allManagers.RemoveAt(j);
+                    }
+
+                }
+            }
+
+            for (int j = allRobots.Count - 1; j >= 0; j--)
+            {
+                if (mathHelper.areTouching(allRobots[j].X, _player.X, allRobots[j].Y, _player.Y, Joueur.PLAYER_WIDTH + Joueur.MELEE_RANGE, Robot.ROBOT_WIDTH, Joueur.PLAYER_HEIGHT + Joueur.MELEE_RANGE, Robot.ROBOT_HEIGHT) && _player.ModeMelee)
+                {
+                    allRobots[j].Health -= Joueur.MELEE_DAMAGE;
+                    if (allRobots[j].Health <= 0)
+                    {
+                        allRobots.RemoveAt(j);
                     }
 
                 }
