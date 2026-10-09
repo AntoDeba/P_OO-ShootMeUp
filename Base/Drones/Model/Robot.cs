@@ -43,12 +43,10 @@ namespace ShootMeUp.Model
             if (_level == 2)
             {
                 _health = ROBOT_HEALTH_START;
-
             }
             if (_level == 3)
             {
                 _health = ROBOT_HEALTH_START * 2;
-
             }
 
             _initalHealt = _health;
