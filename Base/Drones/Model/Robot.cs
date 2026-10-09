@@ -80,17 +80,17 @@ namespace ShootMeUp.Model
                     {
                         _destX = BattleMap.Player.X;
                         if (BattleMap.Player.Y > _y)
-                            BattleMap.allFaisceaux.Add(new faisceau(_x - (ROBOT_WIDTH / 2), _y - (ROBOT_HEIGHT / 2), 'S'));
+                            BattleMap.allFaisceaux.Add(new Faisceau(_x - (ROBOT_WIDTH / 2), _y - (ROBOT_HEIGHT / 2), 'S'));
                         else
-                            BattleMap.allFaisceaux.Add(new faisceau(_x - (ROBOT_WIDTH / 2), _y - (ROBOT_HEIGHT / 2), 'N'));
+                            BattleMap.allFaisceaux.Add(new Faisceau(_x - (ROBOT_WIDTH / 2), _y - (ROBOT_HEIGHT / 2), 'N'));
                     }
                     else
                     {
                         _destY = BattleMap.Player.Y;
                         if (BattleMap.Player.X > _x)
-                            BattleMap.allFaisceaux.Add(new faisceau(_x - (ROBOT_WIDTH / 2), _y - (ROBOT_HEIGHT / 2), 'E'));
+                            BattleMap.allFaisceaux.Add(new Faisceau(_x - (ROBOT_WIDTH / 2), _y - (ROBOT_HEIGHT / 2), 'E'));
                         else
-                            BattleMap.allFaisceaux.Add(new faisceau(_x - (ROBOT_WIDTH / 2), _y - (ROBOT_HEIGHT / 2), 'O'));
+                            BattleMap.allFaisceaux.Add(new Faisceau(_x - (ROBOT_WIDTH / 2), _y - (ROBOT_HEIGHT / 2), 'O'));
                     }
 
                     _distance = mathHelper.distance(_originX, _originY, _destX, _destY);

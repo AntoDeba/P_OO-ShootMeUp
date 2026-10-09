@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ShootMeUp.Model
 {
-    public class faisceau
+    public class Faisceau
     {
         private float _x;                                   // Position en X depuis la gauche de la carte
         private float _y;                                   // Position en Y depuis le haut de la carte
@@ -24,7 +24,7 @@ namespace ShootMeUp.Model
         public float Y { get => _y; }
         public char Direction { get => _direction; set => _direction = value; }
 
-        public faisceau(float originX, float originY, char direction)
+        public Faisceau(float originX, float originY, char direction)
         {
             this._x = originX;
             this._y = originY;

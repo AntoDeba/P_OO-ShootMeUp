@@ -17,7 +17,8 @@ namespace ShootMeUp
         public static readonly int HEIGHT = 600;
         private char currentlyPressedKey;
         private static Joueur _player;
-        
+
+        private const int NUMBER_OF_OBSTACLES = 5;
         private const int NUMBER_OF_ROBOTS = 4;           //Nombre d'ennemie manager qu'il doit en tout temps avoir sur la carte
         private const int NUMBER_OF_MANAGERS = 7;           //Nombre d'ennemie robot qu'il doit en tout temps avoir sur la carte à partir du niveau 2
         private const int LEVEL_TWO_THRESHHOLD = 100000;    //Argent à partir duquel les ennemis seront de niveau deux
@@ -32,7 +33,8 @@ namespace ShootMeUp
 
         public static List<Manager> allManagers = new List<Manager>();
         public static List<Robot> allRobots = new List<Robot>();
-        public static List<faisceau> allFaisceaux = new List<faisceau>();
+        public static List<Faisceau> allFaisceaux = new List<Faisceau>();
+        public static List<Obstacle> allObstacle = new List<Obstacle>();
 
 
         BufferedGraphicsContext currentContext;
@@ -53,6 +55,11 @@ namespace ShootMeUp
             battleMap = currentContext.Allocate(this.CreateGraphics(), this.DisplayRectangle);
             _player = player;
 
+            while (allObstacle.Count < NUMBER_OF_OBSTACLES)
+            {
+                allObstacle.Add(new Obstacle(randomValueHelper.Alea.Next(BattleMap.WIDTH), randomValueHelper.Alea.Next(BattleMap.HEIGHT)));
+            }
+
         }   
 
         // Affichage de la situation actuelle
@@ -72,8 +79,11 @@ namespace ShootMeUp
             foreach (Robot robot in allRobots)
                 robot.Render(battleMap);
 
-            foreach (faisceau faisceau in allFaisceaux)
+            foreach (Faisceau faisceau in allFaisceaux)
                 faisceau.Render(battleMap);
+
+            foreach (Obstacle obstacle in allObstacle)
+                obstacle.Render(battleMap);
 
             _player.Render(battleMap);
 
@@ -97,8 +107,11 @@ namespace ShootMeUp
             foreach (Robot robot in allRobots)
                 robot.Update(interval);
 
-            foreach (faisceau faisceau in allFaisceaux)
+            foreach (Faisceau faisceau in allFaisceaux)
                 faisceau.Update(interval);
+
+            foreach (Obstacle obstacle in allObstacle)
+                obstacle.Update(interval);
 
             if (_player.Money < LEVEL_TWO_THRESHHOLD)
             {
@@ -248,10 +261,10 @@ namespace ShootMeUp
                 }
 
                 //Vérifie si le joueur à été touché par un vaisseau. On doit prendre en compte le fait que la forme du faisceau peut être de deux manière différente en fonction de son orientation
-                if ((mathHelper.areTouching(_player.X, allFaisceaux[i].X, _player.Y, allFaisceaux[i].Y, Joueur.PLAYER_WIDTH, faisceau.BEAM_WIDTH, Joueur.PLAYER_HEIGHT, faisceau.BEAM_HEIGHT) && (allFaisceaux[i].Direction == 'O' || allFaisceaux[i].Direction == 'E'))
-                    || (mathHelper.areTouching(_player.X, allFaisceaux[i].X, _player.Y, allFaisceaux[i].Y, Joueur.PLAYER_WIDTH, faisceau.BEAM_HEIGHT, Joueur.PLAYER_HEIGHT, faisceau.BEAM_WIDTH) && (allFaisceaux[i].Direction == 'N' || allFaisceaux[i].Direction == 'S')))
+                if ((mathHelper.areTouching(_player.X, allFaisceaux[i].X, _player.Y, allFaisceaux[i].Y, Joueur.PLAYER_WIDTH, Faisceau.BEAM_WIDTH, Joueur.PLAYER_HEIGHT, Faisceau.BEAM_HEIGHT) && (allFaisceaux[i].Direction == 'O' || allFaisceaux[i].Direction == 'E'))
+                    || (mathHelper.areTouching(_player.X, allFaisceaux[i].X, _player.Y, allFaisceaux[i].Y, Joueur.PLAYER_WIDTH, Faisceau.BEAM_HEIGHT, Joueur.PLAYER_HEIGHT, Faisceau.BEAM_WIDTH) && (allFaisceaux[i].Direction == 'N' || allFaisceaux[i].Direction == 'S')))
                 {
-                    _player.Health -= faisceau.BEAM_DAMAGE;
+                    _player.Health -= Faisceau.BEAM_DAMAGE;
                     allFaisceaux.RemoveAt(i);
                 }
             }
