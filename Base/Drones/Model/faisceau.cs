@@ -2,6 +2,7 @@
 using ShootMeUp.Properties;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
@@ -13,9 +14,9 @@ namespace ShootMeUp.Model
     {
         private float _x;                                   // Position en X depuis la gauche de la carte
         private float _y;                                   // Position en Y depuis le haut de la carte
-        public const int BEAM_HEIGHT = 50;                  // hauteur du projectile
-        public const int BEAM_WIDTH = 50;                   // largeur du projectile
-        private const int BEAM_SPEED = 30;                  // Vitesse du projectile
+        public const int BEAM_HEIGHT = 20;                  // hauteur du projectile
+        public const int BEAM_WIDTH = 145;                  // largeur du projectile
+        private const int BEAM_SPEED = 20;                   // Vitesse du projectile
         public const int BEAM_DAMAGE = 25;                  
         private char _direction;                            //les directions cardinal (N,E,S,O) pour les quatre direction 
 
@@ -23,7 +24,7 @@ namespace ShootMeUp.Model
         public float Y { get => _y; }
 
 
-        public faisceau(int originX, int originY, char direction)
+        public faisceau(float originX, float originY, char direction)
         {
             this._x = originX;
             this._y = originY;
@@ -32,6 +33,7 @@ namespace ShootMeUp.Model
 
         public void Update(int interval)
         {
+
             if(_direction == 'S')
             {
                 _y += BEAM_SPEED;
@@ -52,28 +54,34 @@ namespace ShootMeUp.Model
 
         public void Render(BufferedGraphics drawingSpace)
         {
+
+            Graphics g = drawingSpace.Graphics;
+            GraphicsState state = g.Save(); //Sauvegarde la position et la rotation de l'écran
+
             // Déplacer le centre de rotation sur le faisceau
-            drawingSpace.Graphics.TranslateTransform(_x, _y);
+            g.TranslateTransform(_x , _y );
 
             if (_direction == 'S')
             {
-                drawingSpace.Graphics.RotateTransform(0);
+                g.RotateTransform(90);
             }
             if (_direction == 'N')
             {
-                drawingSpace.Graphics.RotateTransform(90);
+                g.RotateTransform(270);
             }
             if (_direction == 'E')
             {
-                drawingSpace.Graphics.RotateTransform(180);
+                g.RotateTransform(0);
             }
             if (_direction == 'O')
             {
-                drawingSpace.Graphics.RotateTransform(270);
+                g.RotateTransform(180);
             }
 
-            // Dessiner le joueur
-            drawingSpace.Graphics.DrawImage(Resources.moneyBag, _x - (BEAM_WIDTH / 2), _y - (BEAM_HEIGHT / 2), BEAM_WIDTH, BEAM_HEIGHT);
+            // Dessine le faisceau
+            g.DrawImage(Resources.faisceau,0 - (BEAM_WIDTH / 2), 0 - (BEAM_HEIGHT / 2), BEAM_WIDTH, BEAM_HEIGHT);
+
+            g.Restore(state);
 
         }
     }

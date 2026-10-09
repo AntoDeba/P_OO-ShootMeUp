@@ -16,7 +16,7 @@ namespace ShootMeUp.Model
         private int _destY = 100;
         private float _originX;
         private float _originY;
-        private const int ROBOT_SPEED = 10;                     // Vitesse du Robot
+        private const int ROBOT_SPEED = 15;                     // Vitesse du Robot
         public const int ROBOT_WIDTH = 45;
         public const int ROBOT_HEIGHT = 80;
         private double _distance;
@@ -73,10 +73,18 @@ namespace ShootMeUp.Model
                 if(_horizontalOrVertical == 0)
                 {
                     _destX = BattleMap.Player.X;
+                    if(BattleMap.Player.Y > _y)
+                        BattleMap.allFaisceaux.Add(new faisceau(_x - (ROBOT_WIDTH / 2) , _y - (ROBOT_HEIGHT / 2), 'S'));
+                    else
+                        BattleMap.allFaisceaux.Add(new faisceau(_x - (ROBOT_WIDTH / 2), _y - (ROBOT_HEIGHT / 2), 'N'));
                 }
                 else
                 {
-                    _destY = BattleMap.Player.Y; 
+                    _destY = BattleMap.Player.Y;
+                    if (BattleMap.Player.X > _x)
+                        BattleMap.allFaisceaux.Add(new faisceau(_x - (ROBOT_WIDTH / 2), _y - (ROBOT_HEIGHT / 2), 'E'));
+                    else
+                        BattleMap.allFaisceaux.Add(new faisceau(_x - (ROBOT_WIDTH / 2), _y - (ROBOT_HEIGHT / 2), 'O'));
                 }
 
                 _distance = mathHelper.distance(_originX, _originY, _destX, _destY);

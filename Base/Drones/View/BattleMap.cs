@@ -19,7 +19,7 @@ namespace ShootMeUp
         private static Joueur _player;
         
         private const int NUMBER_OF_ROBOTS = 4;           //Nombre d'ennemie manager qu'il doit en tout temps avoir sur la carte
-        private const int NUMBER_OF_MANAGERS = 7;           //Nombre d'ennemie robot qu'il doit en tout temps avoir sur la carte à partir du niveau 2
+        private const int NUMBER_OF_MANAGERS = 2;           //Nombre d'ennemie robot qu'il doit en tout temps avoir sur la carte à partir du niveau 2
         private const int LEVEL_TWO_THRESHHOLD = 100000;    //Argent à partir duquel les ennemis seront de niveau deux
         private const int LEVEL_THREE_THRESHHOLD = 500000;  //Argent à partir duquel les ennemis seront de niveau trois
         private int _currentLevel;
@@ -32,6 +32,7 @@ namespace ShootMeUp
 
         public static List<Manager> allManagers = new List<Manager>();
         public static List<Robot> allRobots = new List<Robot>();
+        public static List<faisceau> allFaisceaux = new List<faisceau>();
 
 
         BufferedGraphicsContext currentContext;
@@ -52,9 +53,6 @@ namespace ShootMeUp
             battleMap = currentContext.Allocate(this.CreateGraphics(), this.DisplayRectangle);
             _player = player;
 
-
-            
-
         }   
 
         // Affichage de la situation actuelle
@@ -73,6 +71,9 @@ namespace ShootMeUp
 
             foreach (Robot robot in allRobots)
                 robot.Render(battleMap);
+
+            foreach (faisceau faisceau in allFaisceaux)
+                faisceau.Render(battleMap);
 
             _player.Render(battleMap);
 
@@ -95,6 +96,9 @@ namespace ShootMeUp
             
             foreach (Robot robot in allRobots)
                 robot.Update(interval);
+
+            foreach (faisceau faisceau in allFaisceaux)
+                faisceau.Update(interval);
 
             if (_player.Money < LEVEL_TWO_THRESHHOLD)
             {
