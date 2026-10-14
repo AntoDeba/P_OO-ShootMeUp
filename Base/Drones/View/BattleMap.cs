@@ -55,9 +55,18 @@ namespace ShootMeUp
             battleMap = currentContext.Allocate(this.CreateGraphics(), this.DisplayRectangle);
             _player = player;
 
+            //Fait apparaitre les obstacles et les suprime tant que il y a des chevauchement
             while (allObstacle.Count < NUMBER_OF_OBSTACLES)
             {
-                allObstacle.Add(new Obstacle(randomValueHelper.Alea.Next(BattleMap.WIDTH), randomValueHelper.Alea.Next(BattleMap.HEIGHT)));
+                allObstacle.Add(new Obstacle(randomValueHelper.Alea.Next(Obstacle.OBSTACLE_WIDTH,BattleMap.WIDTH - Obstacle.OBSTACLE_WIDTH), randomValueHelper.Alea.Next(Obstacle.OBSTACLE_HEIGHT,BattleMap.HEIGHT - Obstacle.OBSTACLE_WIDTH)));
+                for (int i = allObstacle.Count - 2; i >= 0; i--)
+                {
+                    if (mathHelper.areTouching(allObstacle[allObstacle.Count - 1].X, allObstacle[i].X, allObstacle[allObstacle.Count - 1].Y, allObstacle[i].Y, Obstacle.OBSTACLE_WIDTH, Obstacle.OBSTACLE_WIDTH, Obstacle.OBSTACLE_HEIGHT, Obstacle.OBSTACLE_HEIGHT))
+                    {
+                        allObstacle.RemoveAt(allObstacle.Count - 1);
+                        break;
+                    }
+                }
             }
 
         }   

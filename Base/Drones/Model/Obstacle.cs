@@ -12,8 +12,11 @@ namespace ShootMeUp.Model
     {
         private int _x;
         private int _y;
-        private const int OBSTACLE_WIDTH = 46;
-        private const int OBSTACLE_HEIGHT = 120;
+        public const int OBSTACLE_WIDTH = 46;
+        public const int OBSTACLE_HEIGHT = 120;
+
+        public int X { get => _x; set => _x = value; }
+        public int Y { get => _y; set => _y = value; }
 
         public Obstacle(int x,int y)
         {
