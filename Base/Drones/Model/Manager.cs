@@ -1,4 +1,5 @@
 ﻿using ShootMeUp.Helpers;
+using ShootMeUp.Model;
 using ShootMeUp.Properties;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,9 @@ namespace ShootMeUp
     {
         private float _x;                                      // Position en X depuis la gauche de l'espace aérien
         private float _y;                                      // Position en Y depuis le haut de l'espace aérien
+
+        private float _expectedX;                               //X que l'on pense avoir (utilisé pour verifier les collisions)
+        private float _expectedY;                               //Y que l'on pense avoir (utilisé pour verifier les collisions)
         private int _destX;
         private int _destY;
         private float _originX;
@@ -87,10 +91,21 @@ namespace ShootMeUp
             else
             {
                 _completionIndex += MANAGER_SPEED / Convert.ToSingle(_distance);
+                _expectedX = _originX + ((_destX - _originX) * _completionIndex);
+                _expectedY = _originY + ((_destY - _originY) * _completionIndex);
 
-
-                _x = _originX + ((_destX - _originX) * _completionIndex);
-                _y = _originY + ((_destY - _originY) * _completionIndex);
+                for (int i = BattleMap.allObstacle.Count - 1; i >= 0; i--)
+                {
+                    if (mathHelper.areTouching(_expectedX, BattleMap.allObstacle[i].X, _expectedY, BattleMap.allObstacle[i].Y, Obstacle.OBSTACLE_WIDTH, MANAGER_WIDTH, Obstacle.OBSTACLE_HEIGHT, MANAGER_HEIGHT))
+                    {
+                        _completionIndex = 1; //Forcera le manager a trouvé un nouveau chemin.
+                    }
+                }
+                if(_completionIndex != 1)
+                {
+                    _x = _expectedX;
+                    _y = _expectedY;
+                }
             }
 
             if(_fireFrame % FIRE_RATE == 0)
