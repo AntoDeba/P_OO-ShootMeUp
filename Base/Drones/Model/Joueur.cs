@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualBasic.Devices;
 using ShootMeUp.Helpers;
+using ShootMeUp.Model;
 using ShootMeUp.Properties;
 using System;
 
@@ -10,6 +11,10 @@ namespace ShootMeUp
     {
         private int _x;                                              // Position en X depuis la gauche de l'espace aérien
         private int _y;                                              // Position en Y depuis le haut de l'espace aérien
+
+        private int _previousX;                                     //Position X de la derniere frame (utilisé pour les collision)
+        private int _previousY;                                     //Position Y de la derniere frame (utilisé pour les collision)
+
         private const int SPEED = 20;                               // Vitesse du joueur
         public const int PLAYER_HEIGHT = 98;
         public const int PLAYER_WIDTH = 36;
@@ -46,6 +51,9 @@ namespace ShootMeUp
             _framesSinceLastMeleeAtack++;
             _framesSinceLastShot++;
 
+            _previousX = _x;
+            _previousY = _y;
+
             //Modifife la position du joueur en fonction de la touche sur laquelle il appuie en ne dépassant pas les limites.
             //la position change en fonction de la vitesse
             if (keysPressed.Contains('W') == true && _y > 0)
@@ -56,8 +64,17 @@ namespace ShootMeUp
                 _x -= SPEED;
             if (keysPressed.Contains('D') == true && _x < BattleMap.WIDTH-PLAYER_WIDTH)
                 _x += SPEED;
+            
+            for (int i = BattleMap.allObstacle.Count - 1; i >= 0; i--)
+            {
+                if (mathHelper.areTouching(_x, BattleMap.allObstacle[i].X, _y, BattleMap.allObstacle[i].Y, Obstacle.OBSTACLE_WIDTH, PLAYER_WIDTH, Obstacle.OBSTACLE_HEIGHT, PLAYER_HEIGHT))
+                {
+                    _x = _previousX;
+                    _y = _previousY;
+                }
+            }
 
-            if(_framesSinceLastMeleeAtack == 1)
+            if (_framesSinceLastMeleeAtack == 1)
             {
                 _modeMelee = true;
             }
