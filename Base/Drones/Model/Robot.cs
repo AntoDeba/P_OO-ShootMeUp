@@ -12,6 +12,9 @@ namespace ShootMeUp.Model
     {
         private float _x;                                       // Position en X depuis la gauche de l'espace aérien
         private float _y;                                       // Position en Y depuis le haut de l'espace aérien
+
+        private float _expectedX;                               //X que l'on pense avoir (utilisé pour verifier les collisions)
+        private float _expectedY;                               //Y que l'on pense avoir (utilisé pour verifier les collisions)
         private int _destX = 100;
         private int _destY = 100;
         private float _originX;
@@ -107,10 +110,38 @@ namespace ShootMeUp.Model
             else
             {
                 _completionIndex += ROBOT_SPEED / Convert.ToSingle(_distance);
+                
+                _expectedX = _originX + ((_destX - _originX) * _completionIndex);
+                _expectedY = _originY + ((_destY - _originY) * _completionIndex);
 
+                for (int i = BattleMap.allObstacle.Count - 1; i >= 0; i--)
+                {
+                    if (mathHelper.areTouching(_expectedX, BattleMap.allObstacle[i].X, _expectedY, BattleMap.allObstacle[i].Y, Obstacle.OBSTACLE_WIDTH, ROBOT_WIDTH, Obstacle.OBSTACLE_HEIGHT, ROBOT_HEIGHT))
+                    {
+                        //Si il se touchent, on trouve une nouvelle desination
+                        if (_horizontalOrVertical == 0)
+                        {
+                            _destY = randomValueHelper.Alea.Next(ROBOT_HEIGHT, BattleMap.HEIGHT - ROBOT_HEIGHT);
+                            _destX = BattleMap.Player.X;
+                        }
+                        else
+                        {
+                            _destX = randomValueHelper.Alea.Next(ROBOT_WIDTH, BattleMap.WIDTH - ROBOT_WIDTH);
+                            _destY = BattleMap.Player.Y;
+                        }
 
-                _x = _originX + ((_destX - _originX) * _completionIndex);
-                _y = _originY + ((_destY - _originY) * _completionIndex);
+                        _originX = _x;
+                        _originY = _y;
+                        _distance = mathHelper.distance(_originX, _originY, _destX, _destY);
+                        _completionIndex = 0;
+                        _timeSinceArrivalAtDest = 0;
+                    }
+                }
+                if (_completionIndex != 0)
+                {
+                    _x = _expectedX;
+                    _y = _expectedY;
+                }
             }
         }
 
