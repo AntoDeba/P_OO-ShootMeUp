@@ -19,8 +19,8 @@ namespace ShootMeUp
         private static Joueur _player;
 
         private const int NUMBER_OF_OBSTACLES = 5;
-        private const int NUMBER_OF_ROBOTS = 4;           //Nombre d'ennemie manager qu'il doit en tout temps avoir sur la carte
-        private const int NUMBER_OF_MANAGERS = 7;           //Nombre d'ennemie robot qu'il doit en tout temps avoir sur la carte à partir du niveau 2
+        private const int NUMBER_OF_ROBOTS = 4;             //Nombre d'ennemie robot qu'il doit en tout temps avoir sur la carte à partir du niveau 2
+        private const int NUMBER_OF_MANAGERS = 7;           //Nombre d'ennemie manager qu'il doit en tout temps avoir sur la carte
         private const int LEVEL_TWO_THRESHHOLD = 100000;    //Argent à partir duquel les ennemis seront de niveau deux
         private const int LEVEL_THREE_THRESHHOLD = 500000;  //Argent à partir duquel les ennemis seront de niveau trois
         private int _currentLevel;
@@ -61,7 +61,7 @@ namespace ShootMeUp
                 allObstacle.Add(new Obstacle(randomValueHelper.Alea.Next(Obstacle.OBSTACLE_WIDTH,BattleMap.WIDTH - Obstacle.OBSTACLE_WIDTH), randomValueHelper.Alea.Next(Obstacle.OBSTACLE_HEIGHT,BattleMap.HEIGHT - Obstacle.OBSTACLE_WIDTH)));
                 for (int i = allObstacle.Count - 2; i >= 0; i--)
                 {
-                    if (mathHelper.areTouching(allObstacle[allObstacle.Count - 1].X, allObstacle[i].X, allObstacle[allObstacle.Count - 1].Y, allObstacle[i].Y, Obstacle.OBSTACLE_WIDTH, Obstacle.OBSTACLE_WIDTH, Obstacle.OBSTACLE_HEIGHT, Obstacle.OBSTACLE_HEIGHT))
+                    if (mathHelper.areTouching(allObstacle[allObstacle.Count - 1].X, allObstacle[i].X, allObstacle[allObstacle.Count - 1].Y, allObstacle[i].Y, Obstacle.OBSTACLE_WIDTH + Joueur.PLAYER_WIDTH, Obstacle.OBSTACLE_WIDTH + Joueur.PLAYER_WIDTH, Obstacle.OBSTACLE_HEIGHT + Joueur.PLAYER_HEIGHT, Obstacle.OBSTACLE_HEIGHT + Joueur.PLAYER_HEIGHT))
                     {
                         allObstacle.RemoveAt(allObstacle.Count - 1);
                         break;
@@ -75,6 +75,9 @@ namespace ShootMeUp
         private void Render()
         {
             battleMap.Graphics.Clear(Color.AliceBlue);
+
+            foreach (Obstacle obstacle in allObstacle)
+                obstacle.Render(battleMap);
 
             foreach (projectileBurger monBurger in allBurgers) //affiches les projectils burgers
                 monBurger.Render(battleMap);
@@ -91,8 +94,7 @@ namespace ShootMeUp
             foreach (Faisceau faisceau in allFaisceaux)
                 faisceau.Render(battleMap);
 
-            foreach (Obstacle obstacle in allObstacle)
-                obstacle.Render(battleMap);
+
 
             _player.Render(battleMap);
 
@@ -216,6 +218,28 @@ namespace ShootMeUp
                         break;
                     }
                 }
+
+                try
+                {
+                    if (allBurgers[i].X == 1)
+                    {
+                        //Rien faire
+                    }
+                }
+                catch
+                {
+                    continue;
+                }
+
+                //Regarde si une collision avec un obstacle à eu lieu
+                for (int j = allObstacle.Count - 1; j >= 0; j--)
+                {
+                    if (mathHelper.areTouching(allBurgers[i].X, allObstacle[j].X, allBurgers[i].Y, allObstacle[j].Y, Obstacle.OBSTACLE_WIDTH, projectileBurger.BURGER_WIDTH, Obstacle.OBSTACLE_HEIGHT, projectileBurger.BURGER_HEIGHT))
+                    {
+                        allBurgers.RemoveAt(i);
+                        break;
+                    }
+                }
             }
             
             for (int j = allManagers.Count - 1; j >= 0; j--)
@@ -253,11 +277,22 @@ namespace ShootMeUp
                     continue;
                 }
 
-                //Vérifie si le joueur à été touché par un sac d'
+                //Vérifie si le joueur à été touché par un sac d'argent
                 if (mathHelper.areTouching(_player.X, allMoneyBags[i].X, _player.Y, allMoneyBags[i].Y, Joueur.PLAYER_WIDTH, moneyBag.MONEY_BAG_WIDTH, Joueur.PLAYER_HEIGHT, moneyBag.MONEY_BAG_HEIGHT))
                 {
                     _player.Health -= allMoneyBags[i].Damage;
                     allMoneyBags.RemoveAt(i);
+                    continue;
+                }
+
+                //Regarde si une collision avec un obstacle à eu lieu
+                for (int j = allObstacle.Count - 1; j >= 0; j--)
+                {
+                    if (mathHelper.areTouching(allMoneyBags[i].X, allObstacle[j].X, allMoneyBags[i].Y, allObstacle[j].Y, Obstacle.OBSTACLE_WIDTH, moneyBag.MONEY_BAG_WIDTH, Obstacle.OBSTACLE_HEIGHT, moneyBag.MONEY_BAG_WIDTH))
+                    {
+                        allMoneyBags.RemoveAt(i);
+                        break;
+                    }
                 }
             }
 
@@ -275,6 +310,18 @@ namespace ShootMeUp
                 {
                     _player.Health -= Faisceau.BEAM_DAMAGE;
                     allFaisceaux.RemoveAt(i);
+                    continue;
+                }
+
+                //Regarde si une collision avec un obstacle à eu lieu
+                for (int j = allObstacle.Count - 1; j >= 0; j--)
+                {
+                    if ((mathHelper.areTouching(allObstacle[j].X, allFaisceaux[i].X, allObstacle[j].Y, allFaisceaux[i].Y, Obstacle.OBSTACLE_WIDTH, Faisceau.BEAM_WIDTH, Obstacle.OBSTACLE_HEIGHT, Faisceau.BEAM_HEIGHT) && (allFaisceaux[i].Direction == 'O' || allFaisceaux[i].Direction == 'E'))
+                        || (mathHelper.areTouching(allObstacle[j].X, allFaisceaux[i].X, allObstacle[j].Y, allFaisceaux[i].Y, Obstacle.OBSTACLE_WIDTH, Faisceau.BEAM_HEIGHT, Obstacle.OBSTACLE_HEIGHT, Faisceau.BEAM_WIDTH) && (allFaisceaux[i].Direction == 'N' || allFaisceaux[i].Direction == 'S')))
+                    {
+                        allFaisceaux.RemoveAt(i);
+                        break;
+                    }
                 }
             }
 
