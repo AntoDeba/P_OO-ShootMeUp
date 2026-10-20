@@ -33,7 +33,7 @@ namespace ShootMeUp
         private const int MANAGER_LOOT_AT_START = 5000;     //Argent qu'un manager fait tomber au début (évolue avec les niveaux)
         private const int MANAGER_HEALTH_START = 13;        //PV d'un manager au début (évolue avec les niveaux) 
         private int _projectileDamage;                      //Dégats effectuer par les sacs (évolue avec les niveaux)
-        private const int FIRE_RATE = 40;                   //À quelle fréquence le manager tire (dixième de sec)
+        public const int FIRE_RATE = 40;                   //À quelle fréquence le manager tire (dixième de sec)
 
 
         public int Health { get => _health; set => _health = value; }

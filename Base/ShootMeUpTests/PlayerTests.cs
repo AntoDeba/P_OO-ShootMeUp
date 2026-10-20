@@ -5,6 +5,17 @@ namespace ShootMeUpTests;
 [TestClass]
 public class PlayerTests
 {
+    [TestInitialize]
+    public void Setup()
+    {
+        BattleMap.allObstacle = new List<Obstacle>();
+        BattleMap.allFaisceaux = new List<Faisceau>();
+        BattleMap.allRobots = new List<Robot>();
+        BattleMap.allManagers = new List<Manager>();
+        BattleMap.allBurgers = new List<ProjectileBurger>();
+        BattleMap.allMoneyBags = new List<MoneyBag>();
+    }
+
     [TestMethod]
     public void PlayerBurgerAttack()
     {
@@ -38,7 +49,7 @@ public class PlayerTests
     [TestMethod]
     public void PlayerGoUp()
     {
-        //Arrange : On créer un joueur
+        //Arrange : On créer un joueur et on enleve les potentiel obstacles
         Joueur monJoueur = new Joueur(BattleMap.WIDTH / 2, BattleMap.HEIGHT / 2);
 
         //Act, on simule avoir appuyer sur 'W'
@@ -53,7 +64,7 @@ public class PlayerTests
     [TestMethod]
     public void PlayerGoDown()
     {
-        //Arrange : On créer un joueur
+        //Arrange : On créer un joueur et on enleve les potentiel obstacles
         Joueur monJoueur = new Joueur(BattleMap.WIDTH / 2, BattleMap.HEIGHT / 2);
 
         //Act, on simule avoir appuyer sur 'S'
@@ -68,7 +79,7 @@ public class PlayerTests
     [TestMethod]
     public void PlayerGoLeft()
     {
-        //Arrange : On créer un joueur
+        //Arrange : On créer un joueur et on enleve les potentiel obstacles
         Joueur monJoueur = new Joueur(BattleMap.WIDTH / 2, BattleMap.HEIGHT / 2);
 
         //Act, on simule avoir appuyer sur 'A'
@@ -83,7 +94,7 @@ public class PlayerTests
     [TestMethod]
     public void PlayerGoRight()
     {
-        //Arrange : On créer un joueur
+        //Arrange : On créer un joueur et on enleve les potentiel obstacles
         Joueur monJoueur = new Joueur(BattleMap.WIDTH / 2, BattleMap.HEIGHT / 2);
 
         //Act, on simule avoir appuyer sur 'D'
@@ -100,7 +111,7 @@ public class PlayerTests
     {
         //Arrange : On créer un joueur et un obstacle
         Joueur monJoueur = new Joueur(BattleMap.WIDTH / 2, BattleMap.HEIGHT / 2);
-        BattleMap.allObstacle.Add(new Obstacle(BattleMap.WIDTH / 2, BattleMap.HEIGHT / 2 - Joueur.PLAYER_HEIGHT));
+        BattleMap.allObstacle.Add(new Obstacle(BattleMap.WIDTH / 2, BattleMap.HEIGHT / 2));
 
         //Act, on simule avoir appuyer sur 'W' pour avancer vers l'obstacle
         monJoueur.KeysPressed.Add('W');

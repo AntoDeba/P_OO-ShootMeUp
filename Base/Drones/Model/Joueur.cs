@@ -12,7 +12,7 @@ namespace ShootMeUp
         private int _previousX;                                     //Position X de la derniere frame (utilisé pour les collision)
         private int _previousY;                                     //Position Y de la derniere frame (utilisé pour les collision)
 
-        private const int SPEED = 20;                               // Vitesse du joueur
+        public const int SPEED = 20;                               // Vitesse du joueur
         public const int PLAYER_HEIGHT = 98;
         public const int PLAYER_WIDTH = 36;
         private List<char> keysPressed = new List<char>();          //Liste des touches pressé
