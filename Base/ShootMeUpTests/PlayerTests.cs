@@ -34,4 +34,80 @@ public class PlayerTests
         //Assert : On regarde si le joueur est en mode melee
         Assert.IsTrue(monJoueur.ModeMelee);
     }
+
+    [TestMethod]
+    public void PlayerGoUp()
+    {
+        //Arrange : On créer un joueur
+        Joueur monJoueur = new Joueur(BattleMap.WIDTH / 2, BattleMap.HEIGHT / 2);
+
+        //Act, on simule avoir appuyer sur 'W'
+        monJoueur.KeysPressed.Add('W');
+        monJoueur.Update(0); 
+
+
+        //Assert : On regarde si le joueur à monter correctement
+        Assert.AreEqual(BattleMap.HEIGHT / 2 - Joueur.SPEED,monJoueur.Y);
+    }
+    
+    [TestMethod]
+    public void PlayerGoDown()
+    {
+        //Arrange : On créer un joueur
+        Joueur monJoueur = new Joueur(BattleMap.WIDTH / 2, BattleMap.HEIGHT / 2);
+
+        //Act, on simule avoir appuyer sur 'S'
+        monJoueur.KeysPressed.Add('S');
+        monJoueur.Update(0);
+
+
+        //Assert : On regarde si le joueur à descendu correctement
+        Assert.AreEqual(BattleMap.HEIGHT / 2 + Joueur.SPEED, monJoueur.Y);
+    }
+
+    [TestMethod]
+    public void PlayerGoLeft()
+    {
+        //Arrange : On créer un joueur
+        Joueur monJoueur = new Joueur(BattleMap.WIDTH / 2, BattleMap.HEIGHT / 2);
+
+        //Act, on simule avoir appuyer sur 'A'
+        monJoueur.KeysPressed.Add('A');
+        monJoueur.Update(0);
+
+
+        //Assert : On regarde si le joueur va correctement à gauche
+        Assert.AreEqual(BattleMap.WIDTH / 2 - Joueur.SPEED, monJoueur.X);
+    }
+
+    [TestMethod]
+    public void PlayerGoRight()
+    {
+        //Arrange : On créer un joueur
+        Joueur monJoueur = new Joueur(BattleMap.WIDTH / 2, BattleMap.HEIGHT / 2);
+
+        //Act, on simule avoir appuyer sur 'D'
+        monJoueur.KeysPressed.Add('D');
+        monJoueur.Update(0);
+
+
+        //Assert : On regarde si le joueur va correctement à droite
+        Assert.AreEqual(BattleMap.WIDTH / 2 + Joueur.SPEED, monJoueur.X);
+    }
+
+    [TestMethod]
+    public void PlayerCollisionWithObstacle()
+    {
+        //Arrange : On créer un joueur et un obstacle
+        Joueur monJoueur = new Joueur(BattleMap.WIDTH / 2, BattleMap.HEIGHT / 2);
+        BattleMap.allObstacle.Add(new Obstacle(BattleMap.WIDTH / 2, BattleMap.HEIGHT / 2 - Joueur.PLAYER_HEIGHT));
+
+        //Act, on simule avoir appuyer sur 'W' pour avancer vers l'obstacle
+        monJoueur.KeysPressed.Add('W');
+        monJoueur.Update(0);
+
+
+        //Assert : On regarde si le joueur à bougé ou non.
+        Assert.AreEqual(BattleMap.HEIGHT / 2, monJoueur.Y);
+    }
 }
