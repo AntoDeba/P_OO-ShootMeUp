@@ -16,10 +16,10 @@ namespace ShootMeUp
         public const int PLAYER_HEIGHT = 98;
         public const int PLAYER_WIDTH = 36;
         private List<char> keysPressed = new List<char>();          //Liste des touches pressé
-        private int _framesSinceLastShot = 0;                       //Nombres de frame depuis la dernieres balle tirée
-        private int _framesSinceLastMeleeAtack = 0;                 //Nombre de frane depuis la derniere attaque de mélée
         private const int SHOOTING_RELAOD_TIME = 10;                //Temps de rechargement
+        private int _framesSinceLastShot = SHOOTING_RELAOD_TIME;    //Nombres de frame depuis la dernieres balle tirée 
         private const int MELEE_RELAOD_TIME = 2;                    //Temps de rechargement
+        private int _framesSinceLastMeleeAtack = MELEE_RELAOD_TIME; //Nombre de frane depuis la derniere attaque de mélée
         private bool _modeMelee = false;                            //Vrai quand le joueur fait une attaque de mélee
         public const int MELEE_DAMAGE = 3;
         public static readonly int MELEE_RANGE = (int)Math.Round(PLAYER_HEIGHT * 1.5);
