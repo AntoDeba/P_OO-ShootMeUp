@@ -28,7 +28,7 @@ namespace ShootMeUp
         private int _level;
         private const int ROBOT_HEALTH_START = 21;              //PV d'un robot au début (évolue avec les niveaux) 
         private int _horizontalOrVertical;                      //Sera égal à 1 si le robot suis le joueur sur l axe y et 0 si c'est sur l'axe x.
-        private const int TIME_FOR_AIMING = 30;
+        public const int TIME_FOR_AIMING = 30;
 
         public int Health { get => _health; set => _health = value; }
         public float X { get => _x; }
