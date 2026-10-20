@@ -1,12 +1,9 @@
 ﻿using Microsoft.VisualBasic.Devices;
-using ShootMeUp.Helpers;
-using ShootMeUp.Model;
 using ShootMeUp.Properties;
 using System;
 
 namespace ShootMeUp
 {
-    // Cette partie de la classe Drone définit ce qu'est un drone par un modèle numérique
     public class Joueur
     {
         private int _x;                                              // Position en X depuis la gauche de l'espace aérien
@@ -67,7 +64,7 @@ namespace ShootMeUp
             
             for (int i = BattleMap.allObstacle.Count - 1; i >= 0; i--)
             {
-                if (mathHelper.areTouching(_x, BattleMap.allObstacle[i].X, _y, BattleMap.allObstacle[i].Y, Obstacle.OBSTACLE_WIDTH, PLAYER_WIDTH, Obstacle.OBSTACLE_HEIGHT, PLAYER_HEIGHT))
+                if (MathHelper.AreTouching(_x, BattleMap.allObstacle[i].X, _y, BattleMap.allObstacle[i].Y, Obstacle.OBSTACLE_WIDTH, PLAYER_WIDTH, Obstacle.OBSTACLE_HEIGHT, PLAYER_HEIGHT))
                 {
                     _x = _previousX;
                     _y = _previousY;
@@ -84,20 +81,17 @@ namespace ShootMeUp
             }
         }
 
-        public void mouseInput(MouseEventArgs e)
+        public void MouseInput(MouseEventArgs e)
         {
-
             if (e.Button == MouseButtons.Left)
             {
                 if (_framesSinceLastShot >= SHOOTING_RELAOD_TIME && _health > 0)
                 {
-                    projectileBurger monBurger = new projectileBurger(e.X, e.Y, _x, _y);
+                    ProjectileBurger monBurger = new ProjectileBurger(e.X, e.Y, _x, _y);
                     BattleMap.allBurgers.Add(monBurger);
                     _framesSinceLastShot = 0;
                 }
-
             }
-
 
             if (e.Button == MouseButtons.Right)
             {
@@ -106,19 +100,7 @@ namespace ShootMeUp
                     _framesSinceLastMeleeAtack = 0;
                 }
             }
-                
-                
-            
-
         }
-
-        /// //////////////////////////////////////////////////////////////////////////////
-        //  
-        //  Ce qui suit appartient à la vue, pas au modèle.
-        //  Il aurait été préférable de séparer la déclaration de la classe Drone en deux,
-        //  Nous regroupons tout ici pour simplifier
-        //  
-        /// //////////////////////////////////////////////////////////////////////////////
 
 
         // De manière graphique

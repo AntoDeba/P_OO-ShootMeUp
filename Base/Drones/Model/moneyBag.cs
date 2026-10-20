@@ -1,5 +1,4 @@
-﻿using ShootMeUp.Helpers;
-using ShootMeUp.Properties;
+﻿using ShootMeUp.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ShootMeUp
 {
-    public class moneyBag
+    public class MoneyBag
     {
         private float _x;                                      // Position en X depuis la gauche de l'espace aérien
         private float _y;                                      // Position en Y depuis le haut de l'espace aérien
@@ -27,7 +26,7 @@ namespace ShootMeUp
         public float Y { get => _y; }
         public int Damage { get => _damage; }
 
-        public moneyBag(int destX, int destY, int originX, int originY, int damage)
+        public MoneyBag(int destX, int destY, int originX, int originY, int damage)
         {
             this._destX = destX;
             this._destY = destY;
@@ -37,7 +36,7 @@ namespace ShootMeUp
             this._y = originY;
             this._damage = damage;
 
-            this._distance = mathHelper.distance(_originX, _originY, _destX, _destY);
+            this._distance = MathHelper.Distance(_originX, _originY, _destX, _destY);
         }
 
         public void Update(int interval)

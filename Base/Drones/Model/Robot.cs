@@ -1,18 +1,16 @@
-﻿using ShootMeUp.Helpers;
-using ShootMeUp.Properties;
+﻿using ShootMeUp.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShootMeUp.Model
+namespace ShootMeUp
 {
     public class Robot
     {
         private float _x;                                       // Position en X depuis la gauche de l'espace aérien
         private float _y;                                       // Position en Y depuis le haut de l'espace aérien
-
         private float _expectedX;                               //X que l'on pense avoir (utilisé pour verifier les collisions)
         private float _expectedY;                               //Y que l'on pense avoir (utilisé pour verifier les collisions)
         private int _destX = 100;
@@ -56,18 +54,18 @@ namespace ShootMeUp.Model
             _initalHealt = _health;
             _timeSinceArrivalAtDest = 0;
 
-            _horizontalOrVertical = randomValueHelper.Alea.Next(0, 2);
+            _horizontalOrVertical = RandomValueHelper.alea.Next(0, 2);
             if (_horizontalOrVertical == 0)
             {
-                _destY = randomValueHelper.Alea.Next(ROBOT_HEIGHT, BattleMap.HEIGHT - ROBOT_HEIGHT);
+                _destY = RandomValueHelper.alea.Next(ROBOT_HEIGHT, BattleMap.HEIGHT - ROBOT_HEIGHT);
                 _destX = BattleMap.Player.X;
             }
             else
             {
-                _destX = randomValueHelper.Alea.Next(ROBOT_WIDTH, BattleMap.WIDTH - ROBOT_WIDTH);
+                _destX = RandomValueHelper.alea.Next(ROBOT_WIDTH, BattleMap.WIDTH - ROBOT_WIDTH);
                 _destY = BattleMap.Player.Y;
             }
-            _distance = mathHelper.distance(_originX, _originY, _destX, _destY);
+            _distance = MathHelper.Distance(_originX, _originY, _destX, _destY);
         }
 
         public void Update(int interval)
@@ -96,7 +94,7 @@ namespace ShootMeUp.Model
                             BattleMap.allFaisceaux.Add(new Faisceau(_x - (ROBOT_WIDTH / 2), _y - (ROBOT_HEIGHT / 2), 'O'));
                     }
 
-                    _distance = mathHelper.distance(_originX, _originY, _destX, _destY);
+                    _distance = MathHelper.Distance(_originX, _originY, _destX, _destY);
                     _completionIndex = 0;
                     _timeSinceArrivalAtDest = 0;
                 }
@@ -116,23 +114,23 @@ namespace ShootMeUp.Model
 
                 for (int i = BattleMap.allObstacle.Count - 1; i >= 0; i--)
                 {
-                    if (mathHelper.areTouching(_expectedX, BattleMap.allObstacle[i].X, _expectedY, BattleMap.allObstacle[i].Y, Obstacle.OBSTACLE_WIDTH, ROBOT_WIDTH, Obstacle.OBSTACLE_HEIGHT, ROBOT_HEIGHT))
+                    if (MathHelper.AreTouching(_expectedX, BattleMap.allObstacle[i].X, _expectedY, BattleMap.allObstacle[i].Y, Obstacle.OBSTACLE_WIDTH, ROBOT_WIDTH, Obstacle.OBSTACLE_HEIGHT, ROBOT_HEIGHT))
                     {
                         //Si il se touchent, on trouve une nouvelle desination
                         if (_horizontalOrVertical == 0)
                         {
-                            _destY = randomValueHelper.Alea.Next(ROBOT_HEIGHT, BattleMap.HEIGHT - ROBOT_HEIGHT);
+                            _destY = RandomValueHelper.alea.Next(ROBOT_HEIGHT, BattleMap.HEIGHT - ROBOT_HEIGHT);
                             _destX = BattleMap.Player.X;
                         }
                         else
                         {
-                            _destX = randomValueHelper.Alea.Next(ROBOT_WIDTH, BattleMap.WIDTH - ROBOT_WIDTH);
+                            _destX = RandomValueHelper.alea.Next(ROBOT_WIDTH, BattleMap.WIDTH - ROBOT_WIDTH);
                             _destY = BattleMap.Player.Y;
                         }
 
                         _originX = _x;
                         _originY = _y;
-                        _distance = mathHelper.distance(_originX, _originY, _destX, _destY);
+                        _distance = MathHelper.Distance(_originX, _originY, _destX, _destY);
                         _completionIndex = 0;
                         _timeSinceArrivalAtDest = 0;
                     }
