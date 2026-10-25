@@ -1,5 +1,4 @@
-﻿using ShootMeUp.Helpers;
-using ShootMeUp.Properties;
+﻿using ShootMeUp.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +8,7 @@ using static System.Windows.Forms.AxHost;
 
 namespace ShootMeUp
 {
-    public class projectileBurger
+    public class ProjectileBurger
     {
         private float _x;                                      // Position en X depuis la gauche de l'espace aérien
         private float _y;                                      // Position en Y depuis le haut de l'espace aérien
@@ -27,7 +26,7 @@ namespace ShootMeUp
         public float X { get => _x;}
         public float Y { get => _y; }
 
-        public projectileBurger(int destX, int destY, int originX, int originY)
+        public ProjectileBurger(int destX, int destY, int originX, int originY)
         {
             this._destX = destX;
             this._destY = destY;
@@ -36,7 +35,7 @@ namespace ShootMeUp
             this._x = originX;
             this._y = originY;
 
-            this._distance = mathHelper.distance(_originX, _originY, _destX, _destY);
+            this._distance = MathHelper.Distance(_originX, _originY, _destX, _destY);
         }
 
         public void Update(int interval)

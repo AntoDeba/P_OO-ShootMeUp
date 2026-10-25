@@ -1,0 +1,1 @@
+﻿[assembly: DoNotParallelize] //Fait en sorte que les tests soient effectuer les uns après les autres

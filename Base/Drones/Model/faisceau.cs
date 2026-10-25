@@ -1,5 +1,4 @@
-﻿using ShootMeUp.Helpers;
-using ShootMeUp.Properties;
+﻿using ShootMeUp.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Drawing2D;
@@ -8,7 +7,7 @@ using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShootMeUp.Model
+namespace ShootMeUp
 {
     public class Faisceau
     {

@@ -1,6 +1,4 @@
-﻿using ShootMeUp.Helpers;
-using ShootMeUp.Model;
-using ShootMeUp.Properties;
+﻿using ShootMeUp.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +33,7 @@ namespace ShootMeUp
         private const int MANAGER_LOOT_AT_START = 5000;     //Argent qu'un manager fait tomber au début (évolue avec les niveaux)
         private const int MANAGER_HEALTH_START = 13;        //PV d'un manager au début (évolue avec les niveaux) 
         private int _projectileDamage;                      //Dégats effectuer par les sacs (évolue avec les niveaux)
-        private const int FIRE_RATE = 40;                   //À quelle fréquence le manager tire (dixième de sec)
+        public const int FIRE_RATE = 40;                   //À quelle fréquence le manager tire (dixième de sec)
 
 
         public int Health { get => _health; set => _health = value; }
@@ -72,7 +70,7 @@ namespace ShootMeUp
             
             _initalHealt = _health;
 
-            _fireFrame = randomValueHelper.Alea.Next(FIRE_RATE);       //Ajout d'aléatoire pour pas que tout les manager tire en même temps.
+            _fireFrame = RandomValueHelper.alea.Next(FIRE_RATE);       //Ajout d'aléatoire pour pas que tout les manager tire en même temps.
         }
 
         public void Update(int interval)
@@ -83,9 +81,9 @@ namespace ShootMeUp
             {
                 _originX = _x;
                 _originY = _y;
-                _destX = randomValueHelper.Alea.Next(MANAGER_WIDTH, BattleMap.WIDTH - MANAGER_WIDTH);
-                _destY = randomValueHelper.Alea.Next(MANAGER_HEIGHT, BattleMap.HEIGHT - MANAGER_HEIGHT);
-                _distance = mathHelper.distance(_originX, _originY, _destX, _destY);
+                _destX = RandomValueHelper.alea.Next(MANAGER_WIDTH, BattleMap.WIDTH - MANAGER_WIDTH);
+                _destY = RandomValueHelper.alea.Next(MANAGER_HEIGHT, BattleMap.HEIGHT - MANAGER_HEIGHT);
+                _distance = MathHelper.Distance(_originX, _originY, _destX, _destY);
                 _completionIndex = 0;
             }
             else
@@ -96,7 +94,7 @@ namespace ShootMeUp
 
                 for (int i = BattleMap.allObstacle.Count - 1; i >= 0; i--)
                 {
-                    if (mathHelper.areTouching(_expectedX, BattleMap.allObstacle[i].X, _expectedY, BattleMap.allObstacle[i].Y, Obstacle.OBSTACLE_WIDTH, MANAGER_WIDTH, Obstacle.OBSTACLE_HEIGHT, MANAGER_HEIGHT))
+                    if (MathHelper.AreTouching(_expectedX, BattleMap.allObstacle[i].X, _expectedY, BattleMap.allObstacle[i].Y, Obstacle.OBSTACLE_WIDTH, MANAGER_WIDTH, Obstacle.OBSTACLE_HEIGHT, MANAGER_HEIGHT))
                     {
                         _completionIndex = 1; //Forcera le manager a trouvé un nouveau chemin.
                     }
@@ -110,7 +108,7 @@ namespace ShootMeUp
 
             if(_fireFrame % FIRE_RATE == 0)
             {
-                BattleMap.allMoneyBags.Add(new moneyBag(BattleMap.Player.X, BattleMap.Player.Y, (int)Math.Round(_x) , (int)Math.Round(_y), _projectileDamage)); //Toutes les 4 secondes on tire un burger en direction du joueur
+                BattleMap.allMoneyBags.Add(new MoneyBag(BattleMap.Player.X, BattleMap.Player.Y, (int)Math.Round(_x) , (int)Math.Round(_y), _projectileDamage)); //Toutes les 4 secondes on tire un burger en direction du joueur
             }
         }
 

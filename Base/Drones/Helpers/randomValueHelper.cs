@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShootMeUp.Helpers
+namespace ShootMeUp
 {
-    public static class randomValueHelper
+    public static class RandomValueHelper
     {
-        public static Random Alea = new Random();
+        public static Random alea = new Random();
     }
 }

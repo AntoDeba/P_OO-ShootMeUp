@@ -1,12 +1,9 @@
 ﻿using Microsoft.VisualBasic.Devices;
-using ShootMeUp.Helpers;
-using ShootMeUp.Model;
 using ShootMeUp.Properties;
 using System;
 
 namespace ShootMeUp
 {
-    // Cette partie de la classe Drone définit ce qu'est un drone par un modèle numérique
     public class Joueur
     {
         private int _x;                                              // Position en X depuis la gauche de l'espace aérien
@@ -15,14 +12,14 @@ namespace ShootMeUp
         private int _previousX;                                     //Position X de la derniere frame (utilisé pour les collision)
         private int _previousY;                                     //Position Y de la derniere frame (utilisé pour les collision)
 
-        private const int SPEED = 20;                               // Vitesse du joueur
+        public const int SPEED = 20;                               // Vitesse du joueur
         public const int PLAYER_HEIGHT = 98;
         public const int PLAYER_WIDTH = 36;
         private List<char> keysPressed = new List<char>();          //Liste des touches pressé
-        private int _framesSinceLastShot = 0;                       //Nombres de frame depuis la dernieres balle tirée
-        private int _framesSinceLastMeleeAtack = 0;                 //Nombre de frane depuis la derniere attaque de mélée
         private const int SHOOTING_RELAOD_TIME = 10;                //Temps de rechargement
+        private int _framesSinceLastShot = SHOOTING_RELAOD_TIME;    //Nombres de frame depuis la dernieres balle tirée 
         private const int MELEE_RELAOD_TIME = 2;                    //Temps de rechargement
+        private int _framesSinceLastMeleeAtack = MELEE_RELAOD_TIME; //Nombre de frane depuis la derniere attaque de mélée
         private bool _modeMelee = false;                            //Vrai quand le joueur fait une attaque de mélee
         public const int MELEE_DAMAGE = 3;
         public static readonly int MELEE_RANGE = (int)Math.Round(PLAYER_HEIGHT * 1.5);
@@ -67,7 +64,7 @@ namespace ShootMeUp
             
             for (int i = BattleMap.allObstacle.Count - 1; i >= 0; i--)
             {
-                if (mathHelper.areTouching(_x, BattleMap.allObstacle[i].X, _y, BattleMap.allObstacle[i].Y, Obstacle.OBSTACLE_WIDTH, PLAYER_WIDTH, Obstacle.OBSTACLE_HEIGHT, PLAYER_HEIGHT))
+                if (MathHelper.AreTouching(_x, BattleMap.allObstacle[i].X, _y, BattleMap.allObstacle[i].Y, Obstacle.OBSTACLE_WIDTH, PLAYER_WIDTH, Obstacle.OBSTACLE_HEIGHT, PLAYER_HEIGHT))
                 {
                     _x = _previousX;
                     _y = _previousY;
@@ -84,20 +81,17 @@ namespace ShootMeUp
             }
         }
 
-        public void mouseInput(MouseEventArgs e)
+        public void MouseInput(MouseEventArgs e)
         {
-
             if (e.Button == MouseButtons.Left)
             {
                 if (_framesSinceLastShot >= SHOOTING_RELAOD_TIME && _health > 0)
                 {
-                    projectileBurger monBurger = new projectileBurger(e.X, e.Y, _x, _y);
+                    ProjectileBurger monBurger = new ProjectileBurger(e.X, e.Y, _x, _y);
                     BattleMap.allBurgers.Add(monBurger);
                     _framesSinceLastShot = 0;
                 }
-
             }
-
 
             if (e.Button == MouseButtons.Right)
             {
@@ -106,19 +100,7 @@ namespace ShootMeUp
                     _framesSinceLastMeleeAtack = 0;
                 }
             }
-                
-                
-            
-
         }
-
-        /// //////////////////////////////////////////////////////////////////////////////
-        //  
-        //  Ce qui suit appartient à la vue, pas au modèle.
-        //  Il aurait été préférable de séparer la déclaration de la classe Drone en deux,
-        //  Nous regroupons tout ici pour simplifier
-        //  
-        /// //////////////////////////////////////////////////////////////////////////////
 
 
         // De manière graphique

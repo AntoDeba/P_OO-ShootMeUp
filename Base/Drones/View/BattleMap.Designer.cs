@@ -44,9 +44,9 @@
             ClientSize = new Size(284, 261);
             Name = "AirSpace";
             Text = "AirSpace";
-            KeyDown += BattleMap_KeyDown;
-            KeyUp += BattleMap_KeyUp;
-            this.MouseClick += mouseClick;
+            KeyDown += BattleMapKeyDown;
+            KeyUp += BattleMapKeyUp;
+            this.MouseClick += BattleMapMouseClick;
             ResumeLayout(false);
 
         }
