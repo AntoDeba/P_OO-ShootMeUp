@@ -25,8 +25,13 @@ public class RobotTests
         BattleMap.allObstacle = new List<Obstacle>(); //Créer une liste vide pour pas qu'il y ait d'obstacle
 
         //Act : On laisse passer le temps qu'il faut à un robot pour tirer
-        while (BattleMap.allFaisceaux.Count < 1)
+        for(int i = 0; i < BattleMap.WIDTH; i++)
+        {
             monRobot.Update(0);
+            if (BattleMap.allFaisceaux.Count > 0)
+                i = BattleMap.WIDTH;
+        }
+
         
 
         //Assert: On regarde si une attaque de type faisceaux à été ajouté.
