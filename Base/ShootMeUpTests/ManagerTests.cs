@@ -47,4 +47,24 @@ public class ManagerTests
         //Assert: On regarde si le manager à bouger (sa position doit avoir changer)
         Assert.IsFalse(BattleMap.WIDTH / 2 == monManager.X || BattleMap.HEIGHT / 2 == monManager.Y);
     }
+
+    [TestMethod]
+    public void ManagerStuckByObstacles()
+    {
+        //Arrange : On créer un manager et un environnement avec un joueur
+        new BattleMap(new Joueur(0, 0));
+        Manager monManager = new Manager(BattleMap.WIDTH / 2, BattleMap.HEIGHT / 2, 1);
+        BattleMap.allObstacle = new List<Obstacle> {
+                                                        new Obstacle(BattleMap.WIDTH / 2 + Manager.MANAGER_WIDTH, BattleMap.HEIGHT / 2),
+                                                        new Obstacle(BattleMap.WIDTH / 2 - Manager.MANAGER_WIDTH, BattleMap.HEIGHT / 2),
+                                                        new Obstacle(BattleMap.WIDTH / 2, BattleMap.HEIGHT / 2 + Manager.MANAGER_HEIGHT),
+                                                        new Obstacle(BattleMap.WIDTH / 2, BattleMap.HEIGHT / 2 - Manager.MANAGER_HEIGHT)
+                                                    }; //Créer une liste avec des obstacles qui entourent le manager
+
+        //Act : On fait passer un update 
+        monManager.Update(0);
+
+        //Assert: On regarde si le manager à bouger
+        Assert.IsTrue(BattleMap.WIDTH / 2 == monManager.X && BattleMap.HEIGHT / 2 == monManager.Y);
+    }
 }

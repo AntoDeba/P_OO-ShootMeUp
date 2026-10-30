@@ -52,4 +52,24 @@ public class RobotTests
         //Assert: On regarde si le manager à bouger (sa position doit avoir changer)
         Assert.IsFalse(BattleMap.WIDTH / 2 == monRobot.X || BattleMap.HEIGHT / 2 == monRobot.Y);
     }
+
+    [TestMethod]
+    public void RobotStuckByObstacles()
+    {
+        //Arrange : On créer un robot et un environnement avec un joueur
+        new BattleMap(new Joueur(0, 0));
+        Robot monRobot = new Robot(BattleMap.WIDTH / 2, BattleMap.HEIGHT / 2, 1);
+        BattleMap.allObstacle = new List<Obstacle> {
+                                                        new Obstacle(BattleMap.WIDTH / 2 + Robot.ROBOT_WIDTH, BattleMap.HEIGHT / 2),
+                                                        new Obstacle(BattleMap.WIDTH / 2 - Robot.ROBOT_WIDTH, BattleMap.HEIGHT / 2),
+                                                        new Obstacle(BattleMap.WIDTH / 2, BattleMap.HEIGHT / 2 + Robot.ROBOT_HEIGHT),
+                                                        new Obstacle(BattleMap.WIDTH / 2, BattleMap.HEIGHT / 2 - Robot.ROBOT_HEIGHT)
+                                                    }; //Créer une liste avec des obstacles qui entourent le robot
+
+        //Act : On fait passer un update 
+        monRobot.Update(0);
+
+        //Assert: On regarde si le manager à bouger
+        Assert.IsTrue(BattleMap.WIDTH / 2 == monRobot.X && BattleMap.HEIGHT / 2 == monRobot.Y);
+    }
 }

@@ -55,11 +55,11 @@ namespace ShootMeUp
             //la position change en fonction de la vitesse
             if (keysPressed.Contains('W') == true && _y > 0)
                 _y -= SPEED;
-            if (keysPressed.Contains('S') == true && _y < BattleMap.HEIGHT-PLAYER_HEIGHT)
+            if (keysPressed.Contains('S') == true && _y < BattleMap.HEIGHT)
                 _y += SPEED;
             if (keysPressed.Contains('A') == true && _x > 0)
                 _x -= SPEED;
-            if (keysPressed.Contains('D') == true && _x < BattleMap.WIDTH-PLAYER_WIDTH)
+            if (keysPressed.Contains('D') == true && _x < BattleMap.WIDTH)
                 _x += SPEED;
             
             for (int i = BattleMap.allObstacle.Count - 1; i >= 0; i--)

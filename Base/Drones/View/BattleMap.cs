@@ -58,7 +58,7 @@ namespace ShootMeUp
             //Fait apparaitre les obstacles et les suprime tant que il y a des chevauchement
             while (allObstacle.Count < NUMBER_OF_OBSTACLES)
             {
-                allObstacle.Add(new Obstacle(RandomValueHelper.alea.Next(Obstacle.OBSTACLE_WIDTH,BattleMap.WIDTH - Obstacle.OBSTACLE_WIDTH), RandomValueHelper.alea.Next(Obstacle.OBSTACLE_HEIGHT,BattleMap.HEIGHT - Obstacle.OBSTACLE_WIDTH)));
+                allObstacle.Add(new Obstacle(RandomValueHelper.alea.Next(Obstacle.OBSTACLE_WIDTH * 3,BattleMap.WIDTH - Obstacle.OBSTACLE_WIDTH * 3), RandomValueHelper.alea.Next(Obstacle.OBSTACLE_HEIGHT * 3,BattleMap.HEIGHT - Obstacle.OBSTACLE_WIDTH * 3)));
                 for (int i = allObstacle.Count - 2; i >= 0; i--)
                 {
                     if (MathHelper.AreTouching(allObstacle[allObstacle.Count - 1].X, allObstacle[i].X, allObstacle[allObstacle.Count - 1].Y, allObstacle[i].Y, Obstacle.OBSTACLE_WIDTH + Joueur.PLAYER_WIDTH, Obstacle.OBSTACLE_WIDTH + Joueur.PLAYER_WIDTH, Obstacle.OBSTACLE_HEIGHT + Joueur.PLAYER_HEIGHT, Obstacle.OBSTACLE_HEIGHT + Joueur.PLAYER_HEIGHT))

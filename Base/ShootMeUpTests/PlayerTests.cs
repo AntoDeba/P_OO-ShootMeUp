@@ -121,4 +121,19 @@ public class PlayerTests
         //Assert : On regarde si le joueur à bougé ou non.
         Assert.AreEqual(BattleMap.HEIGHT / 2, monJoueur.Y);
     }
+
+    [TestMethod]
+    public void PlayerGoOutOfBounds()
+    {
+        //Arrange : On créer un joueur au bord de la map
+        Joueur monJoueur = new Joueur(BattleMap.WIDTH / 2,0);
+
+        //Act, on simule avoir appuyer sur 'W' pour avancer vers l'obstacle
+        monJoueur.KeysPressed.Add('W');
+        monJoueur.Update(0);
+
+
+        //Assert : On regarde si le joueur à bougé ou non.
+        Assert.AreEqual(0, monJoueur.Y);
+    }
 }
